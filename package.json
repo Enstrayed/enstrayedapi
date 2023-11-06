@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "random-key": "^0.3.2"
+  },
+  "name": "api",
+  "version": "1.0.0",
+  "description": "api.enstrayed.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enstrayed/api.git"
+  },
+  "author": "enstrayed",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/enstrayed/api/issues"
+  },
+  "homepage": "https://github.com/enstrayed/api#readme"
+}
