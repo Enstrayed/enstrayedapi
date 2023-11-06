@@ -2,6 +2,8 @@
     "redisServer": "hazeldale",
     "redisPort": 6379,
 
+    "routesDirectory": "./routes",
+
     "apiPort": 8081,
 
     "cider": {
@@ -9,5 +11,11 @@
         "targetPort": 10769,
 
         "authKeyInDb": "apiAuthKeys.cider"
+    },
+
+    "azure": {
+        "connectionString": "",
+        "senderAddress": ""
     }
+
 }

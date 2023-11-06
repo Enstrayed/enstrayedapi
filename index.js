@@ -11,14 +11,14 @@ const db = new Redis({
 })
 module.exports = { app, db, globalConfig } // Export database connection for other files
 
-fs.readdir("./routes", (err, files) => {
+fs.readdir(globalConfig.routesDirectory, (err, files) => {
     if (err) {
         console.log("FATAL: Unable to read ./routes")
     } else {
         let importedRoutes = []
         files.forEach(file => {
             importedRoutes.push(file)
-            require(`./routes/${file}`)
+            require(`${globalConfig.routesDirectory}/${file}`)
         })
         console.log(`Imported Routes: ${importedRoutes}`)
     }
