@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+  enstrayedapi:
+    build:
+      context: .
+    image: enstrayedapi
+    container_name: enstrayedapi
+    restart: unless-stopped
+    volumes:
+      - .:/app
