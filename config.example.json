@@ -1,0 +1,23 @@
+{
+    "redisServer": "hazeldale",
+    "redisPort": 6379,
+
+    "routesDirectory": "./routes",
+
+    "apiPort": 8081,
+
+    "cider": {
+        "targetHost": "localhost",
+        "targetPort": 10769,
+
+        "authKeyInDb": "apiAuthKeys.cider"
+    },
+
+    "azure": {
+        "connectionString": "",
+        "senderAddress": "apinotifications@enstrayed.com",
+
+        "authKeyInDb": "apiAuthKeys.azure"
+    }
+
+}
