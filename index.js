@@ -11,6 +11,9 @@ const db = new Redis({
 })
 module.exports = { app, db, globalConfig } // Export database connection for other files
 
+app.use(express.json()) // Allows receiving JSON bodies
+// see important note: https://expressjs.com/en/api.html#express.json
+
 fs.readdir(globalConfig.routesDirectory, (err, files) => {
     if (err) {
         console.log("FATAL: Unable to read ./routes")
