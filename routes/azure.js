@@ -31,6 +31,7 @@ app.post("/sendemail", (rreq,rres) => {
                 }
 
                 azureEmail.beginSend(message).then(ares => {
+                    console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 200 KEY:${rreq.get("Authorization")}`)
                     rres.sendStatus(200)
                 }).catch(err => {
                     rres.sendStatus(500)
@@ -38,7 +39,7 @@ app.post("/sendemail", (rreq,rres) => {
                 })
 
             } else {
-                console.log(`${rreq.ip} POST /sendemail returned 401`)
+                console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 401`)
                 rres.sendStatus(401)
             }
         }

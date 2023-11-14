@@ -52,7 +52,7 @@ app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
                 })
 
             } else {
-                console.log(`${rreq.ip} POST /cider returned 401`) // TODO: get actual request IP from cloudflare header, this will just log the CF edge IP for now
+                console.log(`${rreq.get("cf-connecting-ip")} POST /cider returned 401`) // log ip of unauthorized requests
                 rres.sendStatus(401) // received auth key was not in database
             }
         }
