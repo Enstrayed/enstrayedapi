@@ -17,7 +17,8 @@
         "connectionString": "",
         "senderAddress": "apinotifications@enstrayed.com",
 
-        "authKeyInDb": "apiAuthKeys.azure"
+        "authKeyInDb": "apiAuthKeys.azure",
+        "usageKeyPrefix": "apiUsage.azure."
     }
 
 }

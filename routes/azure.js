@@ -30,7 +30,10 @@ app.post("/sendemail", (rreq,rres) => {
                     },
                 }
 
+                
+                
                 azureEmail.beginSend(message).then(ares => {
+                    db.incr(`${globalConfig.azure.usageKeyPrefix}${rreq.get("Authorization")}`)
                     console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 200 KEY:${rreq.get("Authorization")}`)
                     rres.sendStatus(200)
                 }).catch(err => {

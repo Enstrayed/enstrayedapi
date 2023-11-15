@@ -43,6 +43,7 @@ app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
                 
                 fetch(`http://${globalConfig.cider.targetHost}:${globalConfig.cider.targetPort}/stop`).then(fres => { // send GET /stop to cider target
                     if (fres.status == 204) {
+                        console.log(`${rreq.get("cf-connecting-ip")} POST /cider returned 200 KEY:${rreq.get("Authorization")}`)
                         rres.sendStatus(200) // if that works then 200
                     } else {
                         rres.sendStatus(500) // otherwise lol
