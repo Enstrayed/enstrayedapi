@@ -23,6 +23,7 @@ app.get("/cider", (rreq,rres) => { // GET current listening from target
                     "songLinkUrl": res.info.url.songLink
                 };
     
+                rres.set("Access-Control-Allow-Origin","*")
                 rres.send(currentListening) // send freshly cached json
             }
 
