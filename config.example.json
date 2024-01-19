@@ -19,6 +19,11 @@
 
         "authKeyInDb": "apiAuthKeys.azure",
         "usageKeyPrefix": "apiUsage.azure."
+    },
+
+    "etyd": {
+        "randomHexLength": 6,
+        "authKeyInDb": "apiAuthKeys.etyd"
     }
 
 }
