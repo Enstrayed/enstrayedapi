@@ -31,32 +31,65 @@ app.options("/etydwrite", (rreq,rres) => {
 
 //                 switch(rreq.body.action) {
 //                     case "set": // Write to db
+
 //                         if (rreq.body.random == true) {
+
 //                             let workingTarget = makeRandomHex()
-                            
+
+//                             db.get(`/${workingTarget}`).then(dbres => {
+//                                 if (dbres != null) {
+//                                     let workingTarget = makeRandomHex()
+
+//                                     db.get(`/${workingTarget}`).then(dbres => {
+//                                         if (dbres != null) {
+//                                             // well fuck
+//                                             rres.sendStatus(409)
+
+//                                         }
+//                                     })
+
+//                                 } else {
+//                                     db.set(`/${workingTarget}`,rreq.body.value)
+//                                     rres.send(`https://etyd.cc/${workingTarget}`)
+//                                 }
+//                             })
+
+//                         } else {
+
+//                             db.get(rreq.body.target).then(dbres => { // check if key already exists
+//                                 if (dbres != null) { // if it does then send 409 conflict
+//                                     console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION set returned 409 KEY:${rreq.get("Authorization")}`)
+//                                     rres.sendStatus(409)
+//                                 } else { 
+//                                     db.set(`/${rreq.body.target}`,rreq.body.value)
+//                                     rres.send(`https://etyd.cc/${rreq.body.target}`)
+//                                 }
+//                             })
+
 //                         }
+//                         break;
 
 
 //                     case "delete":
-//                         db.get(rreq.body.target).then(dbres => {
+//                         db.get(`/${rreq.body.target}`).then(dbres => {
 //                             if (dbres == null) { //if key doesnt exist then log and return 400
 //                                 console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION delete returned 400 KEY:${rreq.get("Authorization")}`)
-//                                 rres.set("Access-Control-Allow-Origin","*")
 //                                 rres.sendStatus(400)
 //                             } else {
-
+//                                 db.del(`/${rreq.body.target}`)
+//                                 rres.sendStatus(200)
 //                             }
 //                         })
+//                         break;
                         
 
 //                     default:
-//                         rres.set("Access-Control-Allow-Origin","*")
 //                         rres.sendStatus(400) // request json didnt include a valid action
+//                         break;
 //                 }
 
 //             } else { // if it doesnt then its a unauthorized request
 //                 console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite returned 401`)
-//                 rres.set("Access-Control-Allow-Origin","*")
 //                 rres.sendStatus(401)
 //             }
 //         }
