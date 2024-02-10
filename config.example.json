@@ -13,12 +13,13 @@
         "authKeyInDb": "apiAuthKeys.cider"
     },
 
-    "azure": {
-        "connectionString": "",
+    "mailjet": {
+        "apiKey": "",
         "senderAddress": "apinotifications@enstrayed.com",
+        "senderName": "API Notifications",
 
-        "authKeyInDb": "apiAuthKeys.azure",
-        "usageKeyPrefix": "apiUsage.azure."
+        "authKeyInDb": "apiAuthKeys.mailjet",
+        "usageKeyPrefix": "apiUsage.mailjet."
     },
 
     "etyd": {

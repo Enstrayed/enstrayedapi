@@ -19,9 +19,15 @@ app.get("/cider", (rreq,rres) => { // GET current listening from target
                     "songName": res.info.name,
                     "artistName": res.info.artistName,
                     "albumName": res.info.albumName,
-                    "artworkUrl": res.info.artwork.url,
-                    "songLinkUrl": res.info.url.songLink
+                    "songLinkUrl": res.info.url.songLink,
+                    "endtimeEpochInMs": res.info.endTime
                 };
+
+                // Formats info.artwork.url from upstream Cider Endpoint
+                let workingArtworkUrl = res.info.artwork.url
+                workingArtworkUrl = workingArtworkUrl.replace("{w}",res.info.artwork.width)
+                workingArtworkUrl = workingArtworkUrl.replace("{h}",res.info.artwork.height)
+                currentListening.artworkUrl = workingArtworkUrl
     
                 rres.set("Access-Control-Allow-Origin","*")
                 rres.send(currentListening) // send freshly cached json
