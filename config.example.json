@@ -1,11 +1,15 @@
 {
-    "redisServer": "hazeldale",
-    "redisPort": 6379,
+    "startup": {
+        "apiPort": 8081,
+        "routesDir": "./routes",
+        "documentationUrl": "https://api.enstrayed.com"
+    },
 
-    "routesDirectory": "./routes",
-
-    "apiPort": 8081,
-
+    "couchdb": {
+        "host": "hazeldale:5984",
+        "authorization": ""
+    },
+    
     "cider": {
         "targetHost": "localhost",
         "targetPort": 10769,
@@ -25,6 +29,11 @@
     "etyd": {
         "randomHexLength": 6,
         "authKeyInDb": "apiAuthKeys.etyd"
+    },
+
+    "blog": {
+        "postsDirectory": "C:/Users/natha/Downloads/proto/posts",
+        "postsDirUrl": "/posts"
     }
 
 }
