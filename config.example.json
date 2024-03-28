@@ -11,10 +11,9 @@
     },
     
     "cider": {
-        "targetHost": "localhost",
-        "targetPort": 10769,
+        "targetHosts": ["localhost:10769"],
 
-        "authKeyInDb": "apiAuthKeys.cider"
+        "authKeysDoc": "cider"
     },
 
     "mailjet": {
@@ -22,8 +21,7 @@
         "senderAddress": "apinotifications@enstrayed.com",
         "senderName": "API Notifications",
 
-        "authKeyInDb": "apiAuthKeys.mailjet",
-        "usageKeyPrefix": "apiUsage.mailjet."
+        "authKeysDoc": "mailjet"
     },
 
     "etyd": {

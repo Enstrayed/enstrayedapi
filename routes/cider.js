@@ -39,19 +39,19 @@ app.get("/cider", (rreq,rres) => { // GET current listening from target
 
 app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
 
-    fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/cider`, {
+    fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/${globalConfig.cider.authKeysDoc}`, {
         headers: {
             "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
         }
     }).then(dbRes => dbRes.json()).then(dbRes => {
 
         if (dbRes.status == 404) { // If document containing cider auth keys does not exist
-            console.log("ERROR: Could not find apiauthkeys/cider")
+            console.log(`ERROR: Could not find apiauthkeys/${globalConfig.mailjet.authKeysDoc}`)
             rres.sendStatus(500) // Refuse request
         } else {
             if (dbRes["content"][rreq.get("Authorization").split("_")[0]] === rreq.get("Authorization").split("_")[1]) {
 
-                fetch(`http://${globalConfig.cider.targetHost}:${globalConfig.cider.targetPort}/stop`).then(fres => { // send GET /stop to cider target
+                fetch(`http://${globalConfig.cider.targetHosts[0]}/stop`).then(fres => { // send GET /stop to cider target
                     if (fres.status == 204) {
                         console.log(`${rreq.get("cf-connecting-ip")} POST /cider returned 200 KEY:${rreq.get("Authorization")}`)
                         rres.sendStatus(200) // if that works then 200
@@ -73,7 +73,7 @@ app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
 
 async function getCurrentListening() { // async function to actually get and return the json (this is just adapted from the original gist)
     timeSinceLastCiderQuery = Date.now(); // update last query time
-    return await fetch(`http://${globalConfig.cider.targetHost}:${globalConfig.cider.targetPort}/currentPlayingSong`).then(res => res.json()).catch(err => { // fetch, format and return JSON
+    return await fetch(`http://${globalConfig.cider.targetHosts[0]}/currentPlayingSong`).then(res => res.json()).catch(err => { // fetch, format and return JSON
         return "unreachable"
     })
 

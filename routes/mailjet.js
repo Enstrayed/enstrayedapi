@@ -2,13 +2,17 @@ const { app, db, globalConfig } = require("../index.js") // Get globals from ind
 
 app.post("/sendemail", (rreq,rres) => {
 
-    db.get(globalConfig.mailjet.authKeyInDb).then(dbres => {
-        if (dbres == null) {
-            console.log("ERROR: Configured key containing mailjet authkeys is null")
-            rres.sendStatus(500)
+    fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/${globalConfig.mailjet.authKeysDoc}`, {
+        headers: {
+            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
+        }
+    }).then(dbRes => dbRes.json()).then(dbRes => {
+
+        if (dbRes.status == 404) { // If document containing mailjet auth keys does not exist
+            console.log(`ERROR: Could not find apiauthkeys/${globalConfig.mailjet.authKeysDoc}`)
+            rres.sendStatus(500) // Refuse request
         } else {
-            let validKeys = dbres.split(',')
-            if (validKeys.includes(rreq.get("Authorization"))) {
+            if (dbRes["content"][rreq.get("Authorization").split("_")[0]] === rreq.get("Authorization").split("_")[1]) {
 
                 let message = {
                     "Messages": [
@@ -39,7 +43,6 @@ app.post("/sendemail", (rreq,rres) => {
                     body: JSON.stringify(message)
                 }).then(fetchRes => {
                     if (fetchRes.status == 200) {
-                        db.incr(`${globalConfig.mailjet.usageKeyPrefix}${rreq.get("Authorization")}`)
                         console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 200 KEY:${rreq.get("Authorization")}`)
                         rres.sendStatus(200)
                     } else {
@@ -49,8 +52,8 @@ app.post("/sendemail", (rreq,rres) => {
                 })
 
             } else {
-                console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 401`)
-                rres.sendStatus(401)
+                console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 401`) // log ip of unauthorized requests
+                rres.sendStatus(401) // received auth key was not in database
             }
         }
     })
