@@ -1,9 +1,7 @@
 const { app, db, globalConfig } = require("../index.js") // Get globals from index
 
-const date = new Date(); // Import Date for GET caching
-timeSinceLastCiderQuery = Date.now()-2000;
-
-currentListening = {} // GET cache storage
+var timeSinceLastCiderQuery = Date.now()-2000;
+var currentListening = {} // GET cache storage
 
 app.get("/cider", (rreq,rres) => { // GET current listening from target
 
@@ -40,14 +38,19 @@ app.get("/cider", (rreq,rres) => { // GET current listening from target
 })
 
 app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
-    db.get(globalConfig.cider.authKeyInDb).then(dbres => { // get auth keys from database
-        if (dbres == null) { // if key in db is null (non existant) then return 500 to requestee
-            console.log("ERROR: Configured key containing cider authkeys is null")
-            rres.sendStatus(500)
+
+    fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/cider`, {
+        headers: {
+            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
+        }
+    }).then(dbRes => dbRes.json()).then(dbRes => {
+
+        if (dbRes.status == 404) { // If document containing cider auth keys does not exist
+            console.log("ERROR: Could not find apiauthkeys/cider")
+            rres.sendStatus(500) // Refuse request
         } else {
-            let validKeys = dbres.split(','); // format keys (stored as csv)
-            if (validKeys.includes(rreq.get("Authorization"))) { // if Authorization header exists in formatted keys array
-                
+            if (dbRes["content"][rreq.get("Authorization").split("_")[0]] === rreq.get("Authorization").split("_")[1]) {
+
                 fetch(`http://${globalConfig.cider.targetHost}:${globalConfig.cider.targetPort}/stop`).then(fres => { // send GET /stop to cider target
                     if (fres.status == 204) {
                         console.log(`${rreq.get("cf-connecting-ip")} POST /cider returned 200 KEY:${rreq.get("Authorization")}`)
@@ -65,6 +68,7 @@ app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
             }
         }
     })
+
 })
 
 async function getCurrentListening() { // async function to actually get and return the json (this is just adapted from the original gist)
