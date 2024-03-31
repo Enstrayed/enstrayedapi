@@ -31,24 +31,26 @@ app.post("/etydwrite", (rreq,rres) => {
 
                 switch(rreq.body.action) {
                     case "set": // Write to db
-
                         if (rreq.body.random == true) {
 
-                            let workingTarget = makeRandomHex()
-
-                            db.get(`/${workingTarget}`).then(dbres => {
-                                if (dbres != null) {
-                                    let workingTarget = makeRandomHex()
-
-                                    db.get(`/${workingTarget}`).then(dbres => {
-                                        if (dbres != null) {
-                                            // well fuck
+                            let workingTarget = makeRandomHex() // Make a random URL
+                            db.get(`/${workingTarget}`).then(dbres => { // Check if it exists
+                                if (dbres != null) { // If it does
+                                    let workingTarget = makeRandomHex() // Make a new one
+                                    db.get(`/${workingTarget}`).then(dbres => { // Check if *that* exists
+                                        if (dbres != null) { // If it does
+                                            // Then everything is dumb and pointless so just give up
+                                            console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION set returned 409 (Two attempts to find an open key failed)`)
                                             rres.sendStatus(409)
-
+                                        } else { // if it doesnt then set the stupid key I hate this code so much why did I do this serverside this is so dumb
+                                            console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION set returned 200 KEY:${rreq.get("Authorization")} TARGET: ${workingTarget}`)
+                                            db.set(`/${workingTarget}`,rreq.body.value)
+                                            rres.send(`https://etyd.cc/${workingTarget}`)
                                         }
                                     })
 
                                 } else {
+                                    console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION set returned 200 KEY:${rreq.get("Authorization")} TARGET: ${workingTarget}`)
                                     db.set(`/${workingTarget}`,rreq.body.value)
                                     rres.send(`https://etyd.cc/${workingTarget}`)
                                 }
@@ -71,12 +73,18 @@ app.post("/etydwrite", (rreq,rres) => {
 
 
                     case "delete":
-                        db.get(`/${rreq.body.target}`).then(dbres => {
+                        let workingTarget = rreq.body.target.replace("https://etyd.cc/","") // Sanitize input
+                        if (workingTarget.startsWith("/")) {
+                            workingTarget = workingTarget.slice(1)
+                        }
+                        
+                        db.get(`/${workingTarget}`).then(dbres => {
                             if (dbres == null) { //if key doesnt exist then log and return 400
-                                console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION delete returned 400 KEY:${rreq.get("Authorization")}`)
-                                rres.sendStatus(400)
+                                console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION delete returned 404 KEY:${rreq.get("Authorization")} TARGET: ${workingTarget}`)
+                                rres.sendStatus(404)
                             } else {
-                                db.del(`/${rreq.body.target}`)
+                                console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION delete returned 200 KEY:${rreq.get("Authorization")} TARGET: ${workingTarget}`)
+                                db.del(`/${workingTarget}`)
                                 rres.sendStatus(200)
                             }
                         })
@@ -84,6 +92,7 @@ app.post("/etydwrite", (rreq,rres) => {
                         
 
                     default:
+                        console.log(`${rreq.get("cf-connecting-ip")} POST /etydwrite ACTION default returned 400 KEY:${rreq.get("Authorization")}`)
                         rres.sendStatus(400) // request json didnt include a valid action
                         break;
                 }
