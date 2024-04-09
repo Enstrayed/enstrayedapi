@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="_static/etyd.js"></script>
+    <link rel="stylesheet" href="_static/index.css">
+    <title>etyd.cc</title>
+</head>
+<body>
+    <!--Title-->
+    <h1>etyd.cc URL Shortener</h1>
+    <hr>
+
+    <div class="flexbox">
+        <div class="marginright1em">
+            <!--Input-->
+            <label for="auth">Authorization:</label><br>
+            <input type="password" id="authfield" data-bwautofill> <label>CTRL+Shift+L to Autofill</label><br>
+        
+            <label for="url">URL (API Target):</label><br>
+            <input type="text" id="targetfield"><input type="checkbox" id="randomizationtoggle" onclick="randomUrlTick()"> <label>Random</label><br>
+        
+            <label for="value">Value (Redirect Target):</label><br>
+            <input type="text" id="valuefield">
+            <button onclick="buttonFillFromClipboard()" id="clipboard1">Clipboard</button><br>
+        
+            <label for="action">Action:</label><br>
+            <select name="action" id="actiondropdown">
+                <option value="POST">Add</option>
+                <option value="DELETE">Delete</option>
+            </select>
+        
+            <button onclick="postData()">POST Data</button>
+            <button onclick="buttonCopyResult()"  id="clipboard2">Copy Shortened URL</button>
+            <label id="copyconfirmation" style="display: none;">OK</label><br><br>
+        </div>
+    
+        <div>
+            <textarea id="resultfeed" cols="50" class="resultfeed" readonly></textarea>
+        </div>
+    </div>
+
+    
+    <hr>
+
+    <!--Details-->
+
+    <div class="flexbox">
+        <div class="marginright1em">
+            <h2>Instructions</h2>
+            <p>
+                1. Enter your API Key in the 'Authorization' field <br>
+                2. Enter the shortened URL you want to act upon under the 'URL' field<br>
+                3. Enter the URL that the user will be redirected to under the 'Value' field<br>
+                4. Change 'Action' depending if you want to create or delete a URL<br>
+                5. Press 'POST Data' to submit the form to the server
+            </p>
+        </div>
+
+        <div>
+            <h2>Status Code Reference</h2>
+            <p>
+                400: Bad Request - You will see this if you try and delete a non-existent URL<br>
+                401: Unauthorized - Did you enter your API key?<br>
+                405: Method Not Allowed - You will see this if you try a request with no arguments<br>
+                409: Conflict - The entered URL already exists, tick 'Random' and try again<br>
+                500: Internal Server Error - If this happens something has gone very wrong<br>
+                502: Bad Gateway - If you see this the backend is down/unreachable by Caddy<br>
+            </p>
+        </div>
+    </div>
+    
+
+</body>
+</html>
