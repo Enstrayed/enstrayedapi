@@ -12,7 +12,7 @@ function criticalFileLoader(file) {
 }
 
 const globalConfig = JSON.parse(criticalFileLoader('config.json'))
-const globalVersion = criticalFileLoader('GITVERSION').split(" ")
+const globalVersion = criticalFileLoader('GITVERSION').split(" ")[0]
 
 module.exports = { app, globalConfig, fs } // Export express app and fs objects and globalconfig
 
