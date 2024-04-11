@@ -13,6 +13,7 @@ app.get("/cider", (rreq,rres) => { // GET current listening from target
                 rres.sendStatus(503) // If there was a problem getting the upstream JSON, return 503 Service Unavailable.
             } else {
                 rres.set("Access-Control-Allow-Origin","*") // Required (I think?) because of CORS.
+                currentListening = funcRes
                 rres.send(funcRes)
             }
         })
