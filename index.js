@@ -2,12 +2,27 @@ const fs = require('fs');         // Filesystem Access
 const express = require('express'); 
 const app = express();            // Init Express
 
-const globalConfig = JSON.parse(fs.readFileSync('config.json', 'utf-8')) // Read config file
+function criticalFileLoader(file) {
+    try {
+        return fs.readFileSync(file, 'utf-8')
+    } catch {
+        console.error(`FATAL: Failed to load ${file}`)
+        process.exit(1)
+    }
+}
+
+const globalConfig = JSON.parse(criticalFileLoader('config.json'))
+const globalVersion = criticalFileLoader('GITVERSION').split(" ")
 
 module.exports = { app, globalConfig, fs } // Export express app and fs objects and globalconfig
 
 app.use(express.json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json
+
+process.on('SIGTERM', function() {
+    console.log("Received SIGTERM, exiting...")
+    process.exit(0)
+})
 
 // Import Routes
 fs.readdir(globalConfig.startup.routesDir, (err, files) => {
@@ -25,8 +40,8 @@ fs.readdir(globalConfig.startup.routesDir, (err, files) => {
 })
 
 app.get("/", (rreq,rres) => {
-    rres.redirect(globalConfig.startup.documentationUrl)
+    rres.send(`Enstrayed API | Version: ${globalVersion} | Documentation: <a href="https://etyd.cc/apidocs">etyd.cc/apidocs</a>`)
 })
 
-console.log(`Started on ${globalConfig.startup.apiPort}`)
+console.log(`Enstrayed API | Version: ${globalVersion} | Port: ${globalConfig.startup.apiPort}`)
 app.listen(globalConfig.startup.apiPort)

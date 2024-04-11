@@ -1,5 +1,4 @@
-version: '3.0'
-
+---
 services:
   enstrayedapi:
     build:
@@ -8,4 +7,4 @@ services:
     container_name: enstrayedapi
     restart: unless-stopped
     volumes:
-      - .:/app
+      - ./config.json:/app/config.json

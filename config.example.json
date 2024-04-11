@@ -1,8 +1,7 @@
 {
     "startup": {
         "apiPort": 8081,
-        "routesDir": "./routes",
-        "documentationUrl": "https://api.enstrayed.com"
+        "routesDir": "./routes"
     },
 
     "couchdb": {
