@@ -1,41 +1,26 @@
 const { app, db, globalConfig } = require("../index.js") // Get globals from index
 
 var timeSinceLastCiderQuery = Date.now()-2000;
-var currentListening = {} // GET cache storage
+var currentListening = {}
 
 app.get("/cider", (rreq,rres) => { // GET current listening from target
 
-    if (Date.now() < timeSinceLastCiderQuery+2000) { // if it has been <2 seconds since last request
-        rres.send(currentListening); // send cached json
-        // console.log(`Sent cached response`);
+    if (Date.now() < timeSinceLastCiderQuery+2000) { 
+        rres.send(currentListening); // If it has been <2 seconds since the last request, return the cached result.
     } else { 
-        getCurrentListening().then(res => { // fetch JSON from target
-            if (res == "unreachable") { // if fetch returned unreachable
-                rres.sendStatus(503) // send service unavailable to requestee
+        getCurrentListening(globalConfig.cider.targetHosts[0]).then(funcRes => {
+            if (funcRes == 1) {
+                rres.sendStatus(503) // If there was a problem getting the upstream JSON, return 503 Service Unavailable.
             } else {
-                currentListening = { // format source JSON and store to cache
-                    "songName": res.info.name,
-                    "artistName": res.info.artistName,
-                    "albumName": res.info.albumName,
-                    "songLinkUrl": res.info.url.songLink,
-                    "endtimeEpochInMs": res.info.endTime
-                };
-
-                // Formats info.artwork.url from upstream Cider Endpoint
-                let workingArtworkUrl = res.info.artwork.url
-                workingArtworkUrl = workingArtworkUrl.replace("{w}",res.info.artwork.width)
-                workingArtworkUrl = workingArtworkUrl.replace("{h}",res.info.artwork.height)
-                currentListening.artworkUrl = workingArtworkUrl
-    
-                rres.set("Access-Control-Allow-Origin","*")
-                rres.send(currentListening) // send freshly cached json
+                rres.set("Access-Control-Allow-Origin","*") // Required (I think?) because of CORS.
+                currentListening = funcRes
+                rres.send(funcRes)
             }
-
         })
-        // console.log(`Sent uncached response`);
     }
 
 })
+
 
 app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
 
@@ -71,12 +56,33 @@ app.post("/cider", (rreq,rres) => { // POST stop listening on cider target
 
 })
 
-async function getCurrentListening() { // async function to actually get and return the json (this is just adapted from the original gist)
-    timeSinceLastCiderQuery = Date.now(); // update last query time
-    return await fetch(`http://${globalConfig.cider.targetHosts[0]}/currentPlayingSong`).then(res => res.json()).catch(err => { // fetch, format and return JSON
-        return "unreachable"
+// 2024-04-10: Retrieves currentPlayingSong JSON from specified Cider host and
+// returns JSON containing the useful bits if successful, returning 1 if not.
+async function getCurrentListening(host) { // Host should be hostname/ip & port only.
+    timeSinceLastCiderQuery = Date.now(); // Save last time function was run, used to indicate when the cache needs refreshed.
+    return await fetch(`http://${host}/currentPlayingSong`).then(fetchRes => {
+        if (fetchRes.status == 502) {
+            return 1 // If the upstream server returns 502 (Bad Gateway) then internally return 1, indicating error.
+        } else {
+            return fetchRes.json().then(jsonRes => {
+                if (jsonRes.info.name == undefined) {
+                    return 1 // If Cider is running but not playing a song this check prevents an undefined variable error.
+                } else {
+                    return { 
+                        "songName": jsonRes.info.name,
+                        "artistName": jsonRes.info.artistName,
+                        "albumName": jsonRes.info.albumName,
+                        "songLinkUrl": jsonRes.info.url.songLink,
+                        "endtimeEpochInMs": jsonRes.info.endTime,
+                        "artworkUrl": jsonRes.info.artwork.url.replace("{w}", jsonRes.info.artwork.width).replace("{h}", jsonRes.info.artwork.height)
+                    }
+                }
+            })
+        }
+    }).catch(fetchError => {
+        console.error("Error fetch()ing upstream Cider host: "+fetchError)
+        return 1 // If something else happens then log it and return 1, indicating error.
     })
-
 }
 
 module.exports = {app} // export routes to be imported by index for execution

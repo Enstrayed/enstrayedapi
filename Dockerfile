@@ -1,6 +1,9 @@
 FROM node:20
 WORKDIR /app
-EXPOSE 8127
-CMD [ "bash", "init.sh" ] 
 
-# This is just copied from urlshortener cause both apps have similar architecture
+RUN git clone https://github.com/enstrayed/enstrayedapi .
+RUN git config --global --add safe.directory /app
+RUN git show --oneline -s >> GITVERSION
+RUN npm install
+
+ENTRYPOINT [ "node", "index.js" ]

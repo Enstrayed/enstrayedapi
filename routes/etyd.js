@@ -1,24 +1,5 @@
 const { app, db, globalConfig } = require("../index.js") // Get globals from index
 
-// 2024-04-05: Unused because trying to put randomization server side just made no sense
-// function makeRandomHex() {
-//     const characters = "1234567890abcdef"
-//     let counter = 0
-//     let result = ""
-//     while (counter < globalConfig.etyd.randomHexLength) {
-//         result += characters.charAt(Math.floor(Math.random() * characters.length))
-//         counter += 1
-//     }
-//     return result
-// }
-
-// 2024-04-05: Defining OPTIONS for browser prefetch is no longer necessary as CORS is not going to be used
-// app.options("/etydwrite", (rreq,rres) => {
-//     rres.set("Access-Control-Allow-Headers","Authorization")
-//     rres.set("Access-Control-Allow-Origin","*")
-//     rres.sendStatus(204)
-// })
-
 app.get("/etyd*", (rreq,rres) => {
     fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd","")}`, {
         headers: {
