@@ -20,3 +20,21 @@ body {
         min-height: 20vh;
     }
 }
+
+@media (prefers-color-scheme: dark) { /* Dark mode support */
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    input, select, textarea, button {
+        background: none;
+        color: white;
+        border: 2px solid white;
+    }
+
+    input:disabled, button:disabled {
+        opacity: 0.8;
+        cursor: not-allowed;
+    }
+}
