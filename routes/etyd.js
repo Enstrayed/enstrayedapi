@@ -10,7 +10,12 @@ app.get("/etyd*", (rreq,rres) => {
             rres.sendStatus(404)
         } else {
             dbRes.json().then(dbRes => {
-                rres.redirect(dbRes.content.url)
+                try { 
+                    rres.redirect(dbRes.content.url) // Node will crash if the Database entry is malformed
+                } catch (responseError) {
+                    rres.sendStatus(500)
+                    console.log(`${rres.get("cf-connecting-ip")} GET ${rreq.path} returned 500: ${responseError}`)
+                }
             })
         }
     }).catch(fetchError => {
