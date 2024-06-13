@@ -5,7 +5,7 @@ var currentListening = {}
 var currentListeningHtml = ""
 
 app.get("/cider", (rreq,rres) => {
-    rres.set("Access-Control-Allow-Origin","*")
+    
     rres.send("<span>Cider endpoint is temporarily unavailable.</span>")
 })
 
@@ -18,7 +18,7 @@ app.get("/cider", (rreq,rres) => {
 //             if (funcRes == 1) {
 //                 rres.sendStatus(503) // If there was a problem getting the upstream JSON, return 503 Service Unavailable.
 //             } else {
-//                 rres.set("Access-Control-Allow-Origin","*") // Required (I think?) because of CORS.
+//                  // Required (I think?) because of CORS.
 //                 currentListening = funcRes
 //                 rres.send(funcRes)
 //             }

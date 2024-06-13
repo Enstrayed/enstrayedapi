@@ -6,7 +6,7 @@ var cachedResult = {}
 app.get("/blogposts", (rreq, rres) => {
 
     if (Date.now() < timeSinceLastQuery+10000) { // if it has been <10 seconds since last request
-        rres.set("Access-Control-Allow-Origin","*")
+        
 
         if (rreq.query.format === "html") { // if ?format=html then send HTML
             rres.send(cachedResult.asHtml)
@@ -17,7 +17,7 @@ app.get("/blogposts", (rreq, rres) => {
     } else {
         timeSinceLastQuery = Date.now()
         cachedResult = parseFiles()
-        rres.set("Access-Control-Allow-Origin","*")
+        
 
         if (rreq.query.format === "html") { // if ?format=html then send HTML
             rres.send(cachedResult.asHtml)
