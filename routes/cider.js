@@ -5,6 +5,7 @@ var currentListening = {}
 var currentListeningHtml = ""
 
 app.get("/cider", (rreq,rres) => {
+    rres.set("Access-Control-Allow-Origin","*")
     rres.send("<span>Cider endpoint is temporarily unavailable.")
 })
 
