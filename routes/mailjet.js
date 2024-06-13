@@ -7,7 +7,7 @@ app.post("/sendemail", (rreq,rres) => {
         if (authRes === false) { // If the supplied authorization is invalid or an error occured
 
             console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 401`) // Log the request
-            rres.sendStatus(401) // Return 401 Unauthorized
+            rres.sendStatus(401)
 
         } else if (authRes === true) { // If the authorization was valid, continue function
 

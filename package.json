@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/enstrayed/enstrayedapi/issues"
   },
-  "homepage": "https://api.enstrayed.com"
+  "homepage": "https://api.enstrayed.com",
+  "devDependencies": {
+    "@types/bun": "^1.0.12",
+    "@types/node": "^20.12.3"
+  }
 }
