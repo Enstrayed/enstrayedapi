@@ -1,4 +1,5 @@
-const { app, db, globalConfig } = require("../index.js") // Get globals from index
+const { app, globalConfig } = require("../index.js") // Get globals from index
+const { checkAuthorization } = require("../liberals/authorization.js")
 
 app.get("/etyd*", (rreq,rres) => {
     fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd","")}`, {
@@ -25,119 +26,111 @@ app.get("/etyd*", (rreq,rres) => {
 })
 
 app.delete("/etyd*", (rreq,rres) => {
-    
-    fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/${globalConfig.etyd.authKeysDoc}`, {
-        headers: {
-            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-        }
-    }).then(dbRes => dbRes.json()).then(dbRes => {
 
-        if (dbRes.status == 404) { // If document containing cider auth keys does not exist
-            console.log(`ERROR: Could not find apiauthkeys/${globalConfig.etyd.authKeysDoc}`)
-            rres.sendStatus(500) // Refuse request
-        } else {
-            if (rreq.get("Authorization") == null) { // If authorization header is not supplied
-                rres.sendStatus(400) // then return bad request (would return 500 otherwise)
-            } else {
-                if (dbRes["content"][rreq.get("Authorization").split("_")[0]] === rreq.get("Authorization").split("_")[1]) {
+    if (rreq.get("Authorization") === undefined) {
+        rres.sendStatus(400)
+    } else {
+        checkAuthorization(globalConfig.etyd.authKeysDoc,rreq.get("Authorization")).then(authRes => {
+            if (authRes === false) {
+                console.log(`${rreq.get("cf-connecting-ip")} DELETE ${rreq.path} returned 401`) // Log unauthorized requests
+                rres.sendStatus(401)
+            } else if (authRes === true) { // Authorization successful
 
-                    fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, {
-                        headers: {
-                            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-                        }
-                    }).then(dbRes => {
-    
-                        if (dbRes.status == 404) {
-                            rres.sendStatus(404)
-                        } else {
-                            dbRes.json().then(dbRes => {
-                                
-                                fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, {
-                                    method: "DELETE",
-                                    headers: {
-                                        "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`,
-                                        "If-Match": dbRes["_rev"]
-                                    }
-                                }).then(fetchRes => {
-                                    if (fetchRes.status == 200) {
-                                        console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
-                                        rres.sendStatus(200)
-                                    }
-                                }).catch(fetchError => {
-                                    rres.sendStatus(500)
-                                    console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
-                                })
-    
+                fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, { 
+                    headers: {
+                        "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
+                    }
+                }).then(dbRes => {
+
+                    if (dbRes.status == 404) {
+                        rres.sendStatus(404)
+                    } else {
+                        dbRes.json().then(dbRes => {
+                            
+                            fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, {
+                                method: "DELETE",
+                                headers: {
+                                    "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`,
+                                    "If-Match": dbRes["_rev"] // Using the If-Match header is easiest for deleting entries in couchdb
+                                }
+                            }).then(fetchRes => {
+                                if (fetchRes.status == 200) {
+                                    console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
+                                    rres.sendStatus(200)
+                                }
+                            }).catch(fetchError => {
+                                console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                                rres.sendStatus(500)
                             })
-                        }
-    
-                    }).catch(fetchError => {
-                        rres.sendStatus(500)
-                        console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
-                    })
-    
-                } else {
-                    console.log(`${rreq.get("cf-connecting-ip")} DELETE ${rreq.path} returned 401`) // log ip of unauthorized requests
-                    rres.sendStatus(401) // received auth key was not in database
-                }
+
+                        })
+                    }
+
+                }).catch(fetchError => {
+                    console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                    rres.sendStatus(500)
+                })
+
             }
-        }
-    }).catch(fetchError => {
-        rres.sendStatus(500)
-        console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
-    })
+        })
+    }
 
 })
 
-// app.post("/etyd*", (rreq,rres) => {
+app.post("/etyd*", (rreq,rres) => {
+
+    if (rreq.get("Authorization") === undefined) {
+        rres.sendStatus(400)
+    } else {
+        checkAuthorization(globalConfig.etyd.authKeysDoc,rreq.get("Authorization")).then(authRes => {
+            if (authRes === false) {
+                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 401`) // Log unauthorized requests
+                rres.sendStatus(401)
+            } else if (authRes === true) { // Authorization successful
+
+                if (rreq.body["url"] == undefined) {
+                    console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 400 KEY: ${rreq.get("Authorization")}`)
+                    rres.sendStatus(400)
+                } else {
+                    fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, { 
+                        headers: {
+                            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
+                        },
+                        method: "PUT",
+                        body: JSON.stringify({
+                            "content": {
+                                "url": rreq.body["url"]
+                            }
+                        })
+                    }).then(dbRes => {
     
-//     fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/${globalConfig.etyd.authKeysDoc}`, {
-//         headers: {
-//             "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-//         }
-//     }).then(dbRes => dbRes.json()).then(dbRes => {
+                        switch(dbRes.status) {
+                            case 409:
+                                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 409 KEY: ${rreq.get("Authorization")}`)
+                                rres.sendStatus(409)
+                                break;
 
-//         if (dbRes.status == 404) { // If document containing cider auth keys does not exist
-//             console.log(`ERROR: Could not find apiauthkeys/${globalConfig.etyd.authKeysDoc}`)
-//             rres.sendStatus(500) // Refuse request
-//         } else {
-//             if (rreq.get("Authorization") == null) { // If authorization header is not supplied
-//                 rres.sendStatus(400) // then return bad request (would return 500 otherwise)
-//             } else {
-//                 if (dbRes["content"][rreq.get("Authorization").split("_")[0]] === rreq.get("Authorization").split("_")[1]) {
+                            case 201:
+                                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
+                                rres.status(200).send(rreq.path.replace("/etyd", ""))
+                                break;
 
-//                     fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, {
-//                         headers: {
-//                             "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-//                         }
-//                     }).then(dbRes => {
+                            default:
+                                console.log(`ERROR: CouchDB PUT did not return expected code: ${dbRes.status}`)
+                                break;
+                        }
     
-//                         if (dbRes.status !== 404) {
-//                             console.log(`${rres.get("cf-connecting-ip")} POST ${rreq.path} returned 409 KEY: ${rreq.get("Authorization")}`)
-//                             rres.sendStatus(409)
-//                         } else {
-                            
+                    }).catch(fetchError => {
+                        console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                        rres.sendStatus(500)
+                    })
+                }
 
+            }
+        })
+    }
 
-//                         }
-    
-//                     }).catch(fetchError => {
-//                         rres.sendStatus(500)
-//                         console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
-//                     })
-    
-//                 } else {
-//                     console.log(`${rreq.get("cf-connecting-ip")} DELETE ${rreq.path} returned 401`) // log ip of unauthorized requests
-//                     rres.sendStatus(401) // received auth key was not in database
-//                 }
-//             }
-//         }
-//     }).catch(fetchError => {
-//         rres.sendStatus(500)
-//         console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
-//     })
-
-// })
+})
 
 
 module.exports = {app} // export routes to be imported by index for execution
