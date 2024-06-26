@@ -2,7 +2,7 @@
   "dependencies": {
     "express": "^4.18.2"
   },
-  "name": "api",
+  "name": "enstrayedapi",
   "version": "1.0.0",
   "description": "api.enstrayed.com",
   "main": "index.js",

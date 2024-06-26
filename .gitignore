@@ -2,3 +2,5 @@ node_modules/
 config.json
 bun.lockb
 GITVERSION
+todo.txt
+proto.js

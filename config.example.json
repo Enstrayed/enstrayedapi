@@ -8,12 +8,6 @@
         "host": "hazeldale:5984",
         "authorization": ""
     },
-    
-    "cider": {
-        "targetHosts": ["localhost:10769"],
-
-        "authKeysDoc": "cider"
-    },
 
     "mailjet": {
         "apiKey": "",
@@ -23,14 +17,25 @@
         "authKeysDoc": "mailjet"
     },
 
-    "etyd": {
-        "randomHexLength": 6,
-        "authKeyInDb": "apiAuthKeys.etyd"
-    },
-
     "blog": {
         "postsDirectory": "C:/Users/natha/Downloads/proto/posts",
         "postsDirUrl": "/posts"
+    },
+
+    "nowplaying": {
+        "lastfm": {
+            "apiKey": "",
+            "target": "enstrayed"
+        },
+        "jellyfin": {
+            "apiKey": "",
+            "host": "",
+            "target": ""
+        },
+        "cider": {
+            "apiKeys": [],
+            "hosts": []
+        }
     }
 
 }
