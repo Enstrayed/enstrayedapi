@@ -2,11 +2,7 @@ const { app, globalConfig } = require("../index.js") // Get globals from index
 const { checkAuthorization } = require("../liberals/authorization.js")
 
 app.get("/etyd*", (rreq,rres) => {
-    fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd","")}`, {
-        headers: {
-            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-        }
-    }).then(dbRes => {
+    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd","")}`).then(dbRes => {
         if (dbRes.status == 404) {
             rres.sendStatus(404)
         } else {
@@ -36,21 +32,16 @@ app.delete("/etyd*", (rreq,rres) => {
                 rres.sendStatus(401)
             } else if (authRes === true) { // Authorization successful
 
-                fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, { 
-                    headers: {
-                        "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-                    }
-                }).then(dbRes => {
+                fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`).then(dbRes => {
 
                     if (dbRes.status == 404) {
                         rres.sendStatus(404)
                     } else {
                         dbRes.json().then(dbRes => {
                             
-                            fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, {
+                            fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`, {
                                 method: "DELETE",
                                 headers: {
-                                    "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`,
                                     "If-Match": dbRes["_rev"] // Using the If-Match header is easiest for deleting entries in couchdb
                                 }
                             }).then(fetchRes => {
@@ -92,10 +83,7 @@ app.post("/etyd*", (rreq,rres) => {
                     console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 400 KEY: ${rreq.get("Authorization")}`)
                     rres.sendStatus(400)
                 } else {
-                    fetch(`http://${globalConfig.couchdb.host}/etyd${rreq.path.replace("/etyd", "")}`, { 
-                        headers: {
-                            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-                        },
+                    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`, { 
                         method: "PUT",
                         body: JSON.stringify({
                             "content": {

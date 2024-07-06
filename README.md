@@ -2,7 +2,7 @@
 This repository contains the code for my personal web API written in JavaScript using the Express framework. 
 
 ## Documentation
-This file contains documentation relevant for development and deployment, but not necessarily usage. Information for all endpoints is available [on my website](https://music.youtube.com/watch?v=n2LxBXS4jJM&si=ZpzGNBGvQp1cFicW).
+This file contains documentation relevant for development and deployment, but not necessarily usage. Information for all endpoints is available [on my website](https://enstrayed.com/posts/20240409-API-Documentation.html).
 
 ## Issues
 If you would like to report a bug or security issue, please open a GitHub issue. If you are the operator of a service this application accesses, use the contact information provided during registration with your service to contact me directly.
