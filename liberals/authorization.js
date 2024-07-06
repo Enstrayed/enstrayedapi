@@ -1,11 +1,7 @@
 const { globalConfig } = require("../index.js")
 
 async function checkAuthorization(documentToUse,keyToCheck) {
-    return await fetch(`http://${globalConfig.couchdb.host}/apiauthkeys/${documentToUse}`, {
-        headers: {
-            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-        }
-    }).then(fetchRes => {
+    return await fetch(`${globalConfig.couchdbHost}/apiauthkeys/${documentToUse}`).then(fetchRes => {
 
         if (fetchRes.status === 404) { // If document doesnt exist fail gracefully
 
