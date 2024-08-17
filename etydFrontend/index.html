@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,66 +8,44 @@
     <title>etyd.cc</title>
 </head>
 <body>
-    <!--Title-->
     <h1>etyd.cc URL Shortener</h1>
-    <hr>
 
-    <div class="flexbox">
+    <div class="flexbox"> <!--FLEXBOX: [Input Panel] [Log]-->
+
         <div class="marginright1em">
-            <!--Input-->
-            <label for="auth">Authorization:</label><br>
-            <input type="password" id="authfield" data-bwautofill> <label>CTRL+Shift+L to Autofill</label><br>
+            
+            <button class="marginbottom1em" id="loginbutton">Logout enstrayed</button>
+
+            <div class="marginbottom1em">
+                <label for="action">I want to </label>
+                <select name="action" id="actiondropdown">
+                    <option value="POST">Add</option>
+                    <option value="DELETE">Delete</option>
+                </select>
+            </div>
         
-            <label for="url">URL (API Target):</label><br>
-            <input type="text" id="targetfield"><input type="checkbox" id="randomizationtoggle" onclick="randomUrlTick()"> <label>Random</label><br>
+            <div class="marginbottom1em">
+                <label for="url">etyd.cc/</label>
+                <input type="text" id="targetfield"><input type="checkbox" id="randomizationtoggle" onclick="randomUrlTick()"> <label>Random</label>
+            </div>
         
-            <label for="value">Value (Redirect Target):</label><br>
-            <input type="text" id="valuefield">
-            <button onclick="buttonFillFromClipboard()" id="clipboard1">Clipboard</button><br>
+            <div class="marginbottom1em">
+                <label for="value">to go to: </label>
+                <input type="text" id="valuefield" placeholder="https://example.com">
+                <button onclick="buttonFillFromClipboard()" id="clipboard1">Clipboard</button>
+            </div>
         
-            <label for="action">Action:</label><br>
-            <select name="action" id="actiondropdown">
-                <option value="POST">Add</option>
-                <option value="DELETE">Delete</option>
-            </select>
-        
-            <button onclick="postData()">POST Data</button>
-            <button onclick="buttonCopyResult()"  id="clipboard2">Copy Shortened URL</button>
-            <label id="copyconfirmation" style="display: none;">OK</label><br><br>
+            <div class="marginbottom1em">
+                <button onclick="buttonSubmit()" id="buttonSubmit">Submit</button>
+                <button onclick="buttonCopyUrl()" id="buttonCopyUrl">Copy Shortened URL</button>
+                <button onclick="buttonClearLog()" id="buttonClearLog">Clear Log</button>
+            </div>
         </div>
     
         <div>
             <textarea id="resultfeed" cols="50" class="resultfeed" readonly></textarea>
         </div>
-    </div>
 
-    
-    <hr>
-
-    <!--Details-->
-
-    <div class="flexbox">
-        <div class="marginright1em">
-            <h2>Instructions</h2>
-            <p>
-                1. Enter your API Key in the 'Authorization' field <br>
-                2. Enter the shortened URL you want to act upon under the 'URL' field<br>
-                3. Enter the URL that the user will be redirected to under the 'Value' field<br>
-                4. Change 'Action' depending if you want to create or delete a URL<br>
-                5. Press 'POST Data' to submit the form to the server
-            </p>
-        </div>
-
-        <div>
-            <h2>Status Code Reference</h2>
-            <p>
-                400: Bad Request - You will see this if you try and delete a non-existent URL<br>
-                401: Unauthorized - Did you enter your API key?<br>
-                409: Conflict - The entered URL already exists, tick 'Random' and try again<br>
-                500: Internal Server Error - If this happens something has gone very wrong<br>
-                502: Bad Gateway - If you see this the backend is down/unreachable by Caddy<br>
-            </p>
-        </div>
     </div>
     
 

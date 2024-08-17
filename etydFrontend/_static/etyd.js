@@ -1,11 +1,22 @@
-//Firefox check
 window.onload = function() {
-    document.getElementById('resultfeed').value = "hii :3"
     if (navigator.userAgent.includes("Firefox")) {
-        document.getElementById('resultfeed').value += `\nClipboard functionality does not work on Firefox.`
-        document.getElementById('clipboard1').disabled = true
-        document.getElementById('clipboard2').disabled = true
+        document.getElementById('resultfeed').value += `\nClipboard buttons only work on Firefox >127.`
     }
+
+    // Event listeners can only be added after the page is loaded
+    document.getElementById("actiondropdown").addEventListener("change", function() {
+        if (document.getElementById("actiondropdown").value === "POST") {
+            document.getElementById("randomizationtoggle").disabled = false
+            document.getElementById("valuefield").disabled = false
+        } else if (document.getElementById("actiondropdown").value === "DELETE") {
+            document.getElementById("randomizationtoggle").disabled = true
+            document.getElementById("randomizationtoggle").checked = false
+            randomUrlTick()
+            document.getElementById("valuefield").disabled = true
+        } else {
+            console.error("UI Code Error: Action dropdown event listener function reached impossible state")
+        }
+    })
 }
 
 function makeRandomHex(amount) {
@@ -19,6 +30,8 @@ function makeRandomHex(amount) {
     return result
 }
 
+
+
 function randomUrlTick() {
     if (document.getElementById("randomizationtoggle").checked == true) {
         document.getElementById("targetfield").disabled = true
@@ -29,9 +42,9 @@ function randomUrlTick() {
     }
 }
 
-function buttonCopyResult() {
-    navigator.clipboard.writeText(`${document.location.href}${document.getElementById("urlfield").value}`)
-}
+// function buttonCopyResult() {
+//     navigator.clipboard.writeText(`${document.location.href}${document.getElementById("urlfield").value}`)
+// }
 
 function buttonFillFromClipboard() {
     navigator.clipboard.readText().then(res => {
@@ -39,9 +52,29 @@ function buttonFillFromClipboard() {
     })
 }
 
-function postData() {
-    fetch("http://nrdesktop:8081/etydwrite", {
-        method: "POST",
+// Changes the buttons text to OK for 500ms for action feedback
+// "internal" in this context just means not called from the page
+function internalButtonConfirmation(element) {
+    let normalValue = document.getElementById(element).innerHTML
+    document.getElementById(element).innerHTML = "Ok"
+    setTimeout(function() {
+        document.getElementById(element).innerHTML = normalValue
+    }, 500)
+}
+
+function buttonCopyUrl() {
+    navigator.clipboard.writeText(`this doesn't work rn lol`)
+    internalButtonConfirmation("buttonCopyUrl")
+}
+
+function buttonClearLog() {
+    document.getElementById("resultfeed").value = ""
+    internalButtonConfirmation("buttonClearLog")
+}
+
+function submitData() {
+    fetch(`http://nrdesktop:8081/etyd${document.getElementById("targetfield").value}`, {
+        method: document.getElementById("actiondropdown").value,
         mode: "cors",
         headers: {
             "Authorization": document.getElementById("authfield").value
@@ -58,4 +91,3 @@ function postData() {
         document.getElementById("resultfeed").value += `\nError: ${error}`
     })
 }
-

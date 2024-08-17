@@ -1,9 +1,9 @@
 const { app, globalConfig } = require("../index.js") // Get globals from index
-const { checkAuthorization } = require("../liberals/authorization.js")
+const { checkToken } = require("../liberals/auth.js")
 
 app.post("/sendemail", (rreq,rres) => {
 
-    checkAuthorization(globalConfig.mailjet.authKeysDoc,rreq.get("Authorization")).then(authRes => {
+    checkToken(rreq.get("Authorization"),"mailjet").then(authRes => {
         if (authRes === false) { // If the supplied authorization is invalid or an error occured
 
             console.log(`${rreq.get("cf-connecting-ip")} POST /sendemail returned 401`) // Log the request
@@ -21,8 +21,7 @@ app.post("/sendemail", (rreq,rres) => {
                     "Messages": [
                         {
                             "From": {
-                                "Email": globalConfig.mailjet.senderAddress,
-                                "Name": globalConfig.mailjet.senderName,
+                                "Email": globalConfig.mailjet.senderAddress
                             },
                             "To": [
                                 {

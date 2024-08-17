@@ -1,5 +1,5 @@
 const { app, globalConfig } = require("../index.js") // Get globals from index
-const { checkAuthorization } = require("../liberals/authorization.js")
+const { checkToken } = require("../liberals/auth.js")
 
 app.get("/etyd*", (rreq,rres) => {
     fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd","")}`).then(dbRes => {
@@ -26,9 +26,8 @@ app.delete("/etyd*", (rreq,rres) => {
     if (rreq.get("Authorization") === undefined) {
         rres.sendStatus(400)
     } else {
-        checkAuthorization(globalConfig.etyd.authKeysDoc,rreq.get("Authorization")).then(authRes => {
+        checkToken(rreq.get("Authorization"),"etyd").then(authRes => {
             if (authRes === false) {
-                console.log(`${rreq.get("cf-connecting-ip")} DELETE ${rreq.path} returned 401`) // Log unauthorized requests
                 rres.sendStatus(401)
             } else if (authRes === true) { // Authorization successful
 
@@ -73,14 +72,12 @@ app.post("/etyd*", (rreq,rres) => {
     if (rreq.get("Authorization") === undefined) {
         rres.sendStatus(400)
     } else {
-        checkAuthorization(globalConfig.etyd.authKeysDoc,rreq.get("Authorization")).then(authRes => {
+        checkToken(rreq.get("Authorization"),"etyd").then(authRes => {
             if (authRes === false) {
-                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 401`) // Log unauthorized requests
                 rres.sendStatus(401)
             } else if (authRes === true) { // Authorization successful
 
                 if (rreq.body["url"] == undefined) {
-                    console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 400 KEY: ${rreq.get("Authorization")}`)
                     rres.sendStatus(400)
                 } else {
                     fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`, { 
@@ -94,12 +91,10 @@ app.post("/etyd*", (rreq,rres) => {
     
                         switch(dbRes.status) {
                             case 409:
-                                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 409 KEY: ${rreq.get("Authorization")}`)
                                 rres.sendStatus(409)
                                 break;
 
                             case 201:
-                                console.log(`${rreq.get("cf-connecting-ip")} POST ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
                                 rres.status(200).send(rreq.path.replace("/etyd", ""))
                                 break;
 
@@ -119,6 +114,5 @@ app.post("/etyd*", (rreq,rres) => {
     }
 
 })
-
 
 module.exports = {app} // export routes to be imported by index for execution

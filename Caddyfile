@@ -10,6 +10,7 @@
     }
 
     handle @staticpaths {
+        respond /favicon.ico 204
         root ./etydFrontend
         file_server
     }
