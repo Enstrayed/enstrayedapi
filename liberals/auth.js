@@ -1,11 +1,7 @@
 const { globalConfig } = require("../index.js")
 
 async function checkToken(token,scope) {
-    return await fetch(`http://${globalConfig.couchdb.host}/auth/sessions`, {
-        headers: {
-            "Authorization": `Basic ${btoa(globalConfig.couchdb.authorization)}`
-        }
-    }).then(fetchRes => {
+    return await fetch(`${globalConfig.couchdbHost}/auth/sessions`).then(fetchRes => {
 
         // CouchDB should only ever return 200/304 for success so this should work
         // https://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid

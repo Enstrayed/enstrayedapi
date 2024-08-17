@@ -14,7 +14,7 @@ function criticalFileLoader(file) {
 const globalConfig = JSON.parse(criticalFileLoader('config.json'))
 const globalVersion = criticalFileLoader('GITVERSION').split(" ")[0]
 
-module.exports = { app, globalConfig, fs } // Export express app and fs objects and globalconfig
+module.exports = { app, globalConfig, fs, globalVersion } // Export express app and fs objects and globalconfig
 
 app.use(express.json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json
@@ -37,10 +37,6 @@ fs.readdir(globalConfig.startup.routesDir, (err, files) => {
         })
         console.log(`Imported Routes: ${importedRoutes}`)
     }
-})
-
-app.get("/", (rreq,rres) => {
-    rres.send(`Enstrayed API | Version: ${globalVersion} | Documentation: <a href="https://etyd.cc/apidocs">etyd.cc/apidocs</a>`)
 })
 
 console.log(`Enstrayed API | Version: ${globalVersion} | Port: ${globalConfig.startup.apiPort}`)
