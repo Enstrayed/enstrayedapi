@@ -1,6 +1,6 @@
 const { app } = require("../index.js")
 
-app.get("/ip", (rreq,rres) => {
+app.get("/api/ip", (rreq,rres) => {
     let jsonResponse = {
       "IP": rreq.get("cf-connecting-ip") || rreq.ip,
       "Country": rreq.get("cf-ipcountry") || "not_cloudflare",
@@ -10,7 +10,7 @@ app.get("/ip", (rreq,rres) => {
     rres.send(jsonResponse)
 })
 
-app.get("/headers", (rreq,rres) => {
+app.get("/api/headers", (rreq,rres) => {
   rres.send(rreq.headers)
 })
 

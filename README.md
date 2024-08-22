@@ -14,11 +14,12 @@ On startup, this application will look for two files. If either cannot be read, 
 
 <details> <summary>Configuration Example</summary>
 
-* `couchdb.host`: Hostname/IP address and port of a CouchDB server.
-* `couchdb.authorization`: Username & password used to access the CouchDB server, in HTTP Basic authentication format, e.g. `username:password`.
-* `blog.postsDirectory`: Directory that will be parsed when calling /blogposts. If running in Docker this directory will need to be mounted to the container.
-* `blog.postsDirUrl`: Location of the posts directory on the web server.
-* `nowplaying.*.target`: Set to the Last.fm/Jellyfin username to query for playback information.
+* `couchdbHhost`: URL of CouchDB server.
+* `mailjet.apiKey`: Mailjet API Key.
+* `mailjet.senderAddress`: Email address that emails will be received from, must be verified in Mailjet admin panel.
+* `frontpage.frontpageDir`: Directory of frontpage, will be served at root with modifications.
+* `nowplaying.*.apiKey`: API key of respective service.
+* `nowplaying.*.target`: User that should be queried to retrieve playback information.
 
 ```json
 {
@@ -27,28 +28,21 @@ On startup, this application will look for two files. If either cannot be read, 
         "routesDir": "./routes"
     },
 
-    "couchdb": {
-        "host": "hazeldale:5984",
-        "authorization": ""
-    },
+    "couchdbHost": "",
 
     "mailjet": {
         "apiKey": "",
-        "senderAddress": "apinotifications@enstrayed.com",
-        "senderName": "API Notifications",
-
-        "authKeysDoc": "mailjet"
+        "senderAddress": ""
     },
 
-    "blog": {
-        "postsDirectory": "C:/Users/natha/Downloads/proto/posts",
-        "postsDirUrl": "/posts"
+    "frontpage": {
+        "frontpageDir": ""
     },
 
     "nowplaying": {
         "lastfm": {
             "apiKey": "",
-            "target": "enstrayed"
+            "target": ""
         },
         "jellyfin": {
             "apiKey": "",

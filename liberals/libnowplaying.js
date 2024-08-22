@@ -1,12 +1,16 @@
 const { globalConfig } = require("../index.js")
 
+/**
+ * Queries LastFM for user set in config file and returns formatted result
+ * @returns {object} Object containing response in JSON and HTML (as string), WILL RETURN EMPTY OBJECT ON FAILURE!
+ */
 async function queryLastfm() {
     return await fetch(`https://ws.audioscrobbler.com/2.0/?format=json&method=user.getrecenttracks&limit=1&api_key=${globalConfig.nowplaying.lastfm.apiKey}&user=${globalConfig.nowplaying.lastfm.target}`).then(response => response.json()).then(response => {
         if (response["recenttracks"] == undefined) {
-            return 1
+            return {}
         } else {
             if (response.recenttracks.track[0]["@attr"] == undefined) {
-                return 1
+                return {}
             } else {
                 return {
                     "json": {
@@ -20,6 +24,9 @@ async function queryLastfm() {
                 }
             }
         }
+    }).catch(fetchError => {
+        console.log("libnowplaying.js: Fetch failed! "+fetchError)
+        return {}
     })
 }
 

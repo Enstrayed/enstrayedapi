@@ -1,8 +1,9 @@
 const { app, globalConfig } = require("../index.js") // Get globals from index
 const { checkToken } = require("../liberals/auth.js")
+const { logRequest } = require("../liberals/logging.js")
 
-app.get("/etyd*", (rreq,rres) => {
-    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd","")}`).then(dbRes => {
+app.get("/api/etyd*", (rreq,rres) => {
+    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/api/etyd","")}`).then(dbRes => {
         if (dbRes.status == 404) {
             rres.sendStatus(404)
         } else {
@@ -10,18 +11,18 @@ app.get("/etyd*", (rreq,rres) => {
                 try { 
                     rres.redirect(dbRes.content.url) // Node will crash if the Database entry is malformed
                 } catch (responseError) {
+                    logRequest(rres,rreq,500,responseError)
                     rres.sendStatus(500)
-                    console.log(`${rres.get("cf-connecting-ip")} GET ${rreq.path} returned 500: ${responseError}`)
                 }
             })
         }
     }).catch(fetchError => {
+        logRequest(rres,rreq,500,fetchError)
         rres.sendStatus(500)
-        console.log(`${rres.get("cf-connecting-ip")} GET ${rreq.path} returned 500: ${fetchError}`)
     })
 })
 
-app.delete("/etyd*", (rreq,rres) => {
+app.delete("/api/etyd*", (rreq,rres) => {
 
     if (rreq.get("Authorization") === undefined) {
         rres.sendStatus(400)
@@ -31,25 +32,27 @@ app.delete("/etyd*", (rreq,rres) => {
                 rres.sendStatus(401)
             } else if (authRes === true) { // Authorization successful
 
-                fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`).then(dbRes => {
+                fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/api/etyd", "")}`).then(dbRes => {
 
                     if (dbRes.status == 404) {
-                        rres.sendStatus(404)
+                        rres.sendStatus(404) // Entry does not exist
                     } else {
                         dbRes.json().then(dbRes => {
                             
-                            fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`, {
+                            fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/api/etyd", "")}`, {
                                 method: "DELETE",
                                 headers: {
                                     "If-Match": dbRes["_rev"] // Using the If-Match header is easiest for deleting entries in couchdb
                                 }
                             }).then(fetchRes => {
                                 if (fetchRes.status == 200) {
-                                    console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
+                                    // console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 200 KEY: ${rreq.get("Authorization")}`)
+                                    logRequest(rres,rreq,200)
                                     rres.sendStatus(200)
                                 }
                             }).catch(fetchError => {
-                                console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                                // console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                                logRequest(rres,rreq,500,fetchError)
                                 rres.sendStatus(500)
                             })
 
@@ -57,7 +60,7 @@ app.delete("/etyd*", (rreq,rres) => {
                     }
 
                 }).catch(fetchError => {
-                    console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                    logRequest(rres,rreq,500,fetchError)
                     rres.sendStatus(500)
                 })
 
@@ -67,7 +70,7 @@ app.delete("/etyd*", (rreq,rres) => {
 
 })
 
-app.post("/etyd*", (rreq,rres) => {
+app.post("/api/etyd*", (rreq,rres) => {
 
     if (rreq.get("Authorization") === undefined) {
         rres.sendStatus(400)
@@ -80,7 +83,7 @@ app.post("/etyd*", (rreq,rres) => {
                 if (rreq.body["url"] == undefined) {
                     rres.sendStatus(400)
                 } else {
-                    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/etyd", "")}`, { 
+                    fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/api/etyd", "")}`, { 
                         method: "PUT",
                         body: JSON.stringify({
                             "content": {
@@ -95,16 +98,17 @@ app.post("/etyd*", (rreq,rres) => {
                                 break;
 
                             case 201:
-                                rres.status(200).send(rreq.path.replace("/etyd", ""))
+                                rres.status(200).send(rreq.path.replace("/api/etyd", ""))
                                 break;
 
                             default:
-                                console.log(`ERROR: CouchDB PUT did not return expected code: ${dbRes.status}`)
+                                logRequest(rres,rreq,500,`CouchDB PUT did not return expected code: ${dbRes.status}`)
+                                rres.sendStatus(500)
                                 break;
                         }
     
                     }).catch(fetchError => {
-                        console.log(`${rres.get("cf-connecting-ip")} DELETE ${rreq.path} returned 500: ${fetchError}`)
+                        logRequest(rres,rreq,500,fetchError)
                         rres.sendStatus(500)
                     })
                 }
