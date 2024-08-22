@@ -35,7 +35,7 @@ function parseFiles() {
 
         let name = files[x].slice(9).replace(/-/g," ").replace(".html","") // Strip Date, replace seperator with space & remove file extension
 
-        result = `<span>${date} <a href="${globalConfig.blog.postsDirUrl}/${files[x]}">${name}</a></span>`+result
+        result = `<span>${date} <a href="${globalConfig.frontpage.frontpageDir+"/posts/"}/${files[x]}">${name}</a></span>`+result
     }
 
     return result
