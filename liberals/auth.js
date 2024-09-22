@@ -1,4 +1,4 @@
-const { globalConfig } = require("../index.js")
+import { globalConfig } from "../index.js"
 
 /**
  * Checks if a token exists in the sessions file (authentication) and if it has the correct permissions (authorization)
@@ -27,4 +27,4 @@ async function checkToken(token,scope) {
     })
 }
 
-module.exports = {checkToken}
+export {checkToken}

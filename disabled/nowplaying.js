@@ -1,5 +1,5 @@
-const { app, globalConfig } = require("../index.js")
-const { queryLastfm } = require("../liberals/libnowplaying.js")
+import { app, globalConfig } from "../index.js"
+import { queryLastfm } from "../liberals/libnowplaying.js"
 
 var timeSinceLastLastfmQuery = Date.now()-5000
 var cachedLastfmResult = {}
@@ -30,4 +30,4 @@ app.get("/api/nowplaying", (rreq,rres) => {
 
 })
 
-module.exports = {app}
+export {app}

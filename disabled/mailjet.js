@@ -1,6 +1,6 @@
-const { app, globalConfig } = require("../index.js") // Get globals from index
-const { checkToken } = require("../liberals/auth.js")
-const { logRequest } = require("../liberals/logging.js")
+import { app, globalConfig } from "../index.js" // Get globals from index
+import { checkToken } from "../liberals/auth.js"
+import { logRequest } from "../liberals/logging.js"
 
 app.post("/api/sendemail", (rreq,rres) => {
     checkToken(rreq.get("Authorization"),"mailjet").then(authRes => {
@@ -40,4 +40,4 @@ app.post("/api/sendemail", (rreq,rres) => {
     })
 })
 
-module.exports = {app}
+export {app}

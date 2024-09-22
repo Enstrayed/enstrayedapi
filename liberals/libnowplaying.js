@@ -1,4 +1,4 @@
-const { globalConfig } = require("../index.js")
+import { globalConfig } from "../index.js"
 
 /**
  * Queries LastFM for user set in config file and returns formatted result
@@ -30,4 +30,17 @@ async function queryLastfm() {
     })
 }
 
-module.exports = { queryLastfm }
+// async function queryJellyfin() {
+//     return await fetch(`${globalConfig.nowplaying.jellyfin.host}/Sessions`, {
+//         headers: {
+//             "Authorization": `MediaBrowser Token=${globalConfig.nowplaying.jellyfin.apiKey}`
+//         }
+//     }).then(response => response.json()).then(response => {
+//         for (x in response) {
+//             if (response[x].UserName !== globalConfig.nowplaying.jellyfin.target) { break }
+//             if (response[x].)
+//         }
+//     })
+// }
+
+export { queryLastfm }

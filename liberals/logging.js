@@ -23,4 +23,4 @@ function logRequest(response,request,code,extra) {
     console.log(`${request.get("cf-connecting-ip") ?? request.ip}${actualAuth}${request.method} ${request.path} returned ${code}${actualExtra}`)
 }
 
-module.exports = { logRequest }
+export { logRequest }

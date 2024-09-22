@@ -1,5 +1,5 @@
-const { globalConfig, app } = require("../index.js")
-const { logRequest } = require("../liberals/logging.js")
+import { globalConfig, app } from "../index.js"
+import { logRequest } from "../liberals/logging.js"
 
 app.delete("/api/token", (rreq,rres) => {
     fetch(`${globalConfig.couchdbHost}/auth/sessions`).then(res => res.json()).then(fetchRes => {
@@ -31,4 +31,4 @@ app.delete("/api/token", (rreq,rres) => {
     })
 })
 
-module.exports = {app}
+export default {app}

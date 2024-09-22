@@ -1,22 +1,28 @@
-const fs = require('fs');         // Filesystem Access
-const express = require('express'); 
-const app = express();            // Init Express
+import * as fs from 'fs'
+import { execSync } from 'child_process'
+import express, { json } from 'express'
+const app = express()
 
-function criticalFileLoader(file) {
-    try {
-        return fs.readFileSync(file, 'utf-8')
-    } catch {
-        console.error(`FATAL: Failed to load ${file}`)
-        process.exit(1)
-    }
+if (!process.env.API_DBHOST || !process.env.API_DBCRED) {
+    console.log("FATAL: API_DBHOST and API_DBCRED must be set")
+    process.exit(1)
 }
 
-const globalConfig = JSON.parse(criticalFileLoader('config.json'))
-const globalVersion = criticalFileLoader('GITVERSION').split(" ")[0]
+const globalConfig = await fetch(`${process.env.API_DBHOST}/config/${process.env.API_DBCRED.split(":")[0]}`,{
+    headers: { "Authorization": `Basic ${btoa(process.env.API_DBCRED)}`}
+}).then(response => {
+    if (response.status !== 200) {
+        console.log(`FATAL: Failed to download configuration: ${response.status} ${response.statusText}`)
+        process.exit(1)
+    } else {
+        return response.json()
+    }
+})
+const globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
 
-module.exports = { app, globalConfig, fs, globalVersion } // Export express app and fs objects and globalconfig
+export { app, fs, globalConfig, globalVersion}
 
-app.use(express.json()) // Allows receiving JSON bodies
+app.use(json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json
 
 process.on('SIGTERM', function() {
@@ -24,20 +30,19 @@ process.on('SIGTERM', function() {
     process.exit(0)
 })
 
-// Import Routes
-fs.readdir(globalConfig.startup.routesDir, (err, files) => {
+fs.readdir("./routes", (err, files) => {
     if (err) {
-        console.log(`FATAL: Unable to read ${globalConfig.startup.routesDir}`)
+        console.log(`FATAL: Unable to import routes: ${err}`)
         process.exit(1)
     } else {
         let importedRoutes = []
         files.forEach(file => {
-            require(`${globalConfig.startup.routesDir}/${file}`)
+            import(`./routes/${file}`)
             importedRoutes.push(file.slice(0,-3))
         })
         console.log(`Imported Routes: ${importedRoutes}`)
     }
 })
 
-console.log(`Enstrayed API | Version: ${globalVersion} | Port: ${globalConfig.startup.apiPort}`)
-app.listen(globalConfig.startup.apiPort)
+console.log(`Enstrayed API | Version: ${globalVersion} | Port: ${process.env.API_PORT ?? 8081}`)
+app.listen(process.env.API_PORT ?? 8081)

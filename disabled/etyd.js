@@ -1,6 +1,6 @@
-const { app, globalConfig } = require("../index.js") // Get globals from index
-const { checkToken } = require("../liberals/auth.js")
-const { logRequest } = require("../liberals/logging.js")
+import { app, globalConfig } from "../index.js" // Get globals from index
+import { checkToken } from "../liberals/auth.js"
+import { logRequest } from "../liberals/logging.js"
 
 app.get("/api/etyd*", (rreq,rres) => {
     fetch(`${globalConfig.couchdbHost}/etyd${rreq.path.replace("/api/etyd","")}`).then(dbRes => {
@@ -119,4 +119,4 @@ app.post("/api/etyd*", (rreq,rres) => {
 
 })
 
-module.exports = {app} // export routes to be imported by index for execution
+export {app} // export routes to be imported by index for execution
