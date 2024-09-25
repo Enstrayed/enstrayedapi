@@ -6,21 +6,7 @@
  * @param {string} extra Optional extra details to add to log, ideal for caught errors
  */
 function logRequest(response,request,code,extra) {
-    if (extra) {
-        actualExtra = "; Extra: "+extra
-    } else {
-        actualExtra = ""
-    }
-    if (request.get("Authorization")) {
-        actualAuth = `(${request.get("Authorization")})`
-    } else {
-        actualAuth = ""
-    }
-    //           Client IP if connecting over Cloudflare, else IP as received by Express
-    //           |                                      /        Token used (if provided)
-    //           |                                     /         |            Request Method    Request Path             Status code returned to client provided by function call   
-    //           V                                    V          V            V                 V                        V      Extra information if provided by function call
-    console.log(`${request.get("cf-connecting-ip") ?? request.ip}${actualAuth}${request.method} ${request.path} returned ${code}${actualExtra}`)
+    console.log(`${request.get("cf-connecting-ip") ?? request.ip} ${request.get("Authorization") ?? ""} ${request.method} ${request.path} returned ${code} ${extra ?? ""}`)
 }
 
 export { logRequest }

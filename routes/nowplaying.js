@@ -4,13 +4,6 @@ import { queryLastfm } from "../liberals/libnowplaying.js"
 var timeSinceLastLastfmQuery = Date.now()-5000
 var cachedLastfmResult = {}
 
-const notPlayingAnythingPlaceholder = {
-    "json": {
-        "playing": false
-    },
-    "html": `<span>I'm not currently listening to anything.</span>`
-}
-
 app.get("/api/nowplaying", (rreq,rres) => {
 
     if (Date.now() < timeSinceLastLastfmQuery+5000) {

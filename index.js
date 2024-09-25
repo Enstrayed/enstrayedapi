@@ -20,7 +20,7 @@ const globalConfig = await fetch(`${process.env.API_DBHOST}/config/${process.env
 })
 const globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
 
-export { app, fs, globalConfig, globalVersion}
+export { app, fs, globalConfig, globalVersion }
 
 app.use(json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json

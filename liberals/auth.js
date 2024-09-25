@@ -7,7 +7,9 @@ import { globalConfig } from "../index.js"
  * @returns True for successful authentication and authorization, false if either fail
  */
 async function checkToken(token,scope) {
-    return await fetch(`${globalConfig.couchdbHost}/auth/sessions`).then(fetchRes => {
+    return await fetch(`${process.env.API_DBHOST}/auth/sessions`, {
+        headers: { "Authorization": `Basic ${btoa(process.env.API_DBCRED)}`}
+    }).then(fetchRes => {
 
         return fetchRes.json().then(dbRes => { 
 
