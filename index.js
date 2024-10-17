@@ -19,6 +19,8 @@ const globalConfig = await fetch(`${process.env.API_DBHOST}/config/${process.env
     }
 })
 const globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
+// Returns ISO 8601 Date & 24hr time for UTC-7/PDT
+const startTime = new Date(new Date().getTime() - 25200000).toISOString().slice(0,19).replace('T',' ')
 
 export { app, fs, globalConfig, globalVersion }
 
@@ -40,9 +42,9 @@ fs.readdir("./routes", (err, files) => {
             import(`./routes/${file}`)
             importedRoutes.push(file.slice(0,-3))
         })
-        console.log(`Imported Routes: ${importedRoutes}`)
+        process.stdout.write(` | Imported ${importedRoutes} \n`)
     }
 })
 
-console.log(`Enstrayed API | Version: ${globalVersion} | Port: ${process.env.API_PORT ?? 8081}`)
+process.stdout.write(`>>> EnstrayedAPI ${globalVersion} | Started ${startTime} on ${process.env.API_PORT ?? 8081}`)
 app.listen(process.env.API_PORT ?? 8081)
