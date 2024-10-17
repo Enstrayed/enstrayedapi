@@ -1,5 +1,5 @@
 import { app, globalConfig } from "../index.js"
-import { queryLastfm } from "../liberals/libnowplaying.js"
+import { queryLastfm, queryJellyfin } from "../liberals/libnowplaying.js"
 
 var timeSinceLastLastfmQuery = Date.now()-5000
 var cachedLastfmResult = {}
@@ -20,6 +20,14 @@ app.get("/api/nowplaying", (rreq,rres) => {
             rres.send(cachedLastfmResult[rreq.query.format] ?? cachedLastfmResult.json)
         })
     }
+
+})
+
+app.get("/api/nowplayingbeta", (rreq,rres) => {
+
+    queryJellyfin().then(response => {
+        rres.send(response[rreq.query.format] ?? response.json)
+    })
 
 })
 
