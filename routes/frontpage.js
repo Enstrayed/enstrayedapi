@@ -1,4 +1,5 @@
 import { app, globalConfig, fs, globalVersion } from "../index.js" // Get globals from index
+import { marked } from "marked"
 
 var timeSinceLastQuery = Date.now()-10000
 var cachedResult = ""
@@ -8,7 +9,17 @@ app.get("/static/*", (rreq,rres) => {
 })
 
 app.get("/posts/*", (rreq,rres) => {
-    rres.sendFile(globalConfig.frontpage.directory+"posts/"+rreq.url.replace("/posts/",""))
+
+    if (rreq.url.endsWith(".md")) {
+        let file = fs.readFileSync("./static/markdownposttemplate.html","utf-8")
+        file = file.replace("<!--SSR_REPLACE_URL-->",`https://enstrayed.com${rreq.url}`)
+        file = file.replaceAll("<!--SSR_REPLACE_TITLE-->",rreq.url.replace("/posts/","").slice(9).replace(/-/g," ").replace(".md",""))
+        file = file.replace("<!--SSR_REPLACE_BODY-->",marked.parse(fs.readFileSync(globalConfig.frontpage.directory+"posts/"+rreq.url.replace("/posts/",""),"utf-8")))
+        rres.send(file)
+    } else {
+        rres.sendFile(globalConfig.frontpage.directory+"posts/"+rreq.url.replace("/posts/",""))
+    }
+    
 })
 
 app.get("/", (rreq, rres) => {
@@ -26,14 +37,14 @@ function parseFiles() {
     let result = ""
 
     for (let x in files) {
-        if (files[x].endsWith(".html") === false) { break } // If file/dir is not .html then ignore
+        if (files[x].endsWith(".html") === false && files[x].endsWith(".md") === false ) { break } // If file/dir is not .html or .md then ignore
 
         let date = files[x].split("-")[0]
         if (date < 10000000 || date > 99999999) { break } // If date does not fit ISO8601 format then ignore
 
         date = date.replace(/.{2}/g,"$&-").replace("-","").slice(0,-1) // Insert a dash every 2 characters, remove the first dash, remove the last character
 
-        let name = files[x].slice(9).replace(/-/g," ").replace(".html","") // Strip Date, replace seperator with space & remove file extension
+        let name = files[x].slice(9).replace(/-/g," ").replace(".html","").replace(".md","") // Strip Date, replace seperator with space & remove file extension
 
         result = `<span>${date} <a href="/posts/${files[x]}">${name}</a></span>`+result
     }
