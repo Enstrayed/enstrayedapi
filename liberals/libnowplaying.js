@@ -60,7 +60,7 @@ async function queryJellyfin() {
                     "artUrl": `${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary`,
                     "link": `https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}`
                 },
-                "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art" style="width: 10em;"> <div class="textlist"> <p>I'm listening to</p> <h3>${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</h3> <p>from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</p> <a href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}" class="noindent">View on Last.fm</a></div>`
+                "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art" style="width: 10em;"> <div> <h4>I'm listening to</h4> <h3>${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</h3> <h4>from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</h4> <a href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}">View on Last.fm</a></div>`
             }
         }
 

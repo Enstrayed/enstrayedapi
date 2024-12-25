@@ -1,39 +1,65 @@
 import { app, globalConfig, fs, globalVersion } from "../index.js" // Get globals from index
+import { execSync } from 'child_process'
+import { checkToken } from "../liberals/auth.js"
+import { logRequest } from "../liberals/logging.js"
 import { marked } from "marked"
 
 var timeSinceLastQuery = Date.now()-10000
 var cachedResult = ""
 
-app.get("/static/*", (rreq,rres) => {
-    rres.sendFile(globalConfig.frontpage.directory+"static/"+rreq.url.replace("/static/",""))
-})
-
-app.get("/posts/*", (rreq,rres) => {
-
-    if (rreq.url.endsWith(".md")) {
-        let file = fs.readFileSync("./static/markdownposttemplate.html","utf-8")
-        file = file.replace("<!--SSR_REPLACE_URL-->",`https://enstrayed.com${rreq.url}`)
-        file = file.replaceAll("<!--SSR_REPLACE_TITLE-->",rreq.url.replace("/posts/","").slice(9).replace(/-/g," ").replace(".md",""))
-        file = file.replace("<!--SSR_REPLACE_BODY-->",marked.parse(fs.readFileSync(globalConfig.frontpage.directory+"posts/"+rreq.url.replace("/posts/",""),"utf-8")))
-        rres.send(file)
-    } else {
-        rres.sendFile(globalConfig.frontpage.directory+"posts/"+rreq.url.replace("/posts/",""))
-    }
-    
-})
-
 app.get("/", (rreq, rres) => {
     if (Date.now() < timeSinceLastQuery+10000) {
         rres.send(cachedResult)
     } else {
-        let indexFile = fs.readFileSync(globalConfig.frontpage.directory+"index.html","utf-8")
+        let indexFile = fs.readFileSync(process.cwd()+"/website/templates/indextemplate.html","utf-8")
         cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parseFiles()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
         rres.send(cachedResult)
     }
 })
 
+app.get("/static/*", (rreq,rres) => {
+    rres.sendFile(process.cwd()+"/website/static/"+rreq.url.replace("/static/",""))
+})
+
+app.get("/favicon.ico", (rreq,rres) => {
+    rres.sendFile(process.cwd()+"/website/static/")
+})
+
+app.get("/posts/*", (rreq,rres) => {
+
+    if (rreq.url.endsWith(".md")) {
+        let file = fs.readFileSync(process.cwd()+"/website/templates/markdownposttemplate.html","utf-8")
+        file = file.replace("<!--SSR_REPLACE_URL-->",`https://enstrayed.com${rreq.url}`)
+        file = file.replaceAll("<!--SSR_REPLACE_TITLE-->",rreq.url.replace("/posts/","").slice(9).replace(/-/g," ").replace(".md",""))
+        file = file.replace("<!--SSR_REPLACE_BODY-->",marked.parse(fs.readFileSync(process.cwd()+"/website/posts/"+rreq.url.replace("/posts/",""),"utf-8")))
+        rres.send(file)
+    } else {
+        rres.sendFile(process.cwd()+"/website/posts/"+rreq.url.replace("/posts/",""))
+    }
+    
+})
+
+app.post("/api/syncfrontpage", (rreq,rres) => {
+    checkToken(rreq.query.auth,"fpupdate").then(checkResponse => {
+        if (checkResponse === true) {
+            if (rreq.headers["x-github-event"] == "ping") {
+                rres.sendStatus(200)
+            } else if (rreq.headers["x-github-event"] == "push") {
+                execSync("git submodule update --remote")
+                logRequest(rres,rreq,200,"Synchronized Git submodules")
+                rres.sendStatus(200)
+            } else {
+                logRequest(rres,rreq,400)
+                rres.sendStatus(400)
+            }
+        } else {
+            rres.sendStatus(401)
+        }
+    })
+})
+
 function parseFiles() {
-    let files = fs.readdirSync(globalConfig.frontpage.directory+"posts/")
+    let files = fs.readdirSync(process.cwd()+"/website/posts")
     let result = ""
 
     for (let x in files) {
@@ -46,7 +72,7 @@ function parseFiles() {
 
         let name = files[x].slice(9).replace(/-/g," ").replace(".html","").replace(".md","") // Strip Date, replace seperator with space & remove file extension
 
-        result = `<span>${date} <a href="/posts/${files[x]}">${name}</a></span>`+result
+        result = `<li>${date} <a href="/posts/${files[x]}">${name}</a></li>`+result
     }
 
     return result
