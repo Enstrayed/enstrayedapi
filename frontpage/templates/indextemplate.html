@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enstrayed</title>
+
+    <link rel="stylesheet" href="static/index.css">
+    <script>
+        fetch("/api/nowplayingbeta?format=html").then(response => response.text()).then(response => {document.getElementById("nowplaying").innerHTML = response})
+    </script>
+</head>
+<body>
+    <div class="flexcolumn fc_rowgap5em">
+
+        <div>
+            <h1>Enstrayed.com</h1>
+            <div class="flexrow gap1em">
+                <span>@enstrayed</span>
+                <a href="https://twitter.com/enstrayed">Twitter</a>
+                <a href="https://bsky.app/profile/enstrayed.com">Bluesky</a>
+                <a href="https://github.com/enstrayed">GitHub</a>
+            </div>
+        </div>
+
+        <div class="flexrow" id="nowplaying">
+        </div>
+
+        <div>
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="posts/20240409-API-Documentation.html">API Documentation</a></li>
+                <li><a href="urltoolbox">URL Toolbox (Shorten/Cobalt/etc)</a></li>
+                <li><a href="https://downloads.enstrayed.com">Downloads</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>Pages</h2>
+            <ul>
+                <!--SSR_BLOGPOSTS-->
+            </ul>
+            
+        </div>
+
+        <div>
+            <!--SSR_APIVERSION-->
+        </div>
+
+    </div>
+</body>
+</html>

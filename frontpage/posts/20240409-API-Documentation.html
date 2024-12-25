@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/posts.css">
+    <meta property="og:site_name" content="enstrayed.com">
+    <meta property="og:url" content="https://enstrayed.com/posts/20240409-API-Documentation.html">
+
+    <title>Enstrayed: API Documentation</title>
+    <meta property="og:title" content="Enstrayed: API Documentation">
+
+    <meta name="description" content="List of all endpoints and associated information for my web API">
+    <meta property="og:description" content="List of all endpoints and associated information for my web API">
+
+</head>
+<body>
+    <a href="/">Return to enstrayed.com</a>
+    <h1>API Documentation</h1>
+    <p>This page was last updated 2024-08-20.</p>
+
+    <p>Source Code & Issue Tracker: <a href="https://github.com/enstrayed/enstrayedapi">github.com/enstrayed/enstrayedapi</a></p>
+
+    <hr>
+
+
+    <div class="inlineheader">
+        <h2>/api/nowplaying</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/main/routes/nowplaying.js">nowplaying.js</a>
+        <span>GET</span>
+    </div>
+    
+    <p>Returns whatever I'm listening to via the Last.fm API in JSON. If <code>?format=html</code> is used in the URL it will return the same but in HTML. If nothing is playing the JSON response will just have <code>"playing": false</code>.</p>
+
+    <div class="inlineheader">
+        <h2>/api/etyd/*</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/main/routes/etyd.js">etyd.js</a>
+        <span>GET</span>
+        <span>POST</span>
+        <span>DELETE</span>
+    </div>
+
+    <p>Retrieves, creates or deletes entries for the etyd.cc URL shortener. Replace * in the URL for the target of the request.</p>
+
+    <span>Required Headers (POST, DELETE):</span>
+    <ul>
+        <li><code>Authorization</code>: A token with the <code>etyd</code> scope</li>
+    </ul>
+    <span>Required Body (POST):</span>
+    <pre><code>{
+        "url": "urlValue"
+}</code></pre>
+
+    <div class="inlineheader">
+        <h2>/api/sendemail</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/main/routes/mailjet.js#L3">mailjet.js</a>
+        <span>POST</span>
+    </div>
+    
+    <p>Sends an email to the specified recipient, intended for application & automation use.</p>
+
+    <span>Required Headers:</span>
+    <ul>
+        <li><code>Authorization</code>: A token with the <code>mailjet</code> scope</li>
+    </ul>
+    <span>Required Body:</span>
+    <pre><code>{
+        "recipient": "recipientEmailHere",
+        "subject": "emailSubjectHere",
+        "message": "emailBodyHere"
+}</code></pre>
+
+    <div class="inlineheader">
+        <h2>/api/ip</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/main/routes/ip.js">ip.js</a>
+        <span>GET</span>
+    </div>
+
+    <p>Returns the IP, country and Cloudflare ray of the request in JSON.</p>
+
+    <div class="inlineheader">
+        <h2>/api/headers</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/main/routes/ip.js">ip.js</a>
+        <span>GET</span>
+    </div>
+
+    <p>Returns all request headers in JSON.</p>
+</body>
+</html>

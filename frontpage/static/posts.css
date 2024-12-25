@@ -1,0 +1,74 @@
+html {
+    display: grid;
+    place-content: center;
+}
+
+body {
+    margin: 2em 1em;
+    font-family: Consolas, monospace;
+
+    color: white;
+    background-color: black;
+
+    max-width: 80ch
+}
+
+a, a:link {
+    color: #FF5A36;
+}
+
+a:hover {
+    color: #ff7a5d;
+}
+
+
+code {
+    background: #222;
+    padding: 0.25rem;
+    font-family: Consolas, monospace;
+}
+
+pre code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    background: #222;
+    padding: 1rem;
+}
+
+hr {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+h2 {
+    margin: 0;
+}
+
+.inlineheader {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.inlineheader > h2, a {
+    margin-right: 1rem;
+}
+
+.inlineheader > span {
+    margin-right: 0.5rem;
+    padding: 0.2rem;
+    color: white;
+    background-color: #f06445;
+}
+
+@media (prefers-color-scheme: light) { /* Light Mode Support */
+    body {
+        background-color: white;
+        color: black;
+    }
+
+    a, a:link {
+        color: #B32100;
+    }
+}
