@@ -49,14 +49,10 @@ h2 {
     display: flex;
     align-items: center;
     margin-top: 2rem;
-}
-
-.inlineheader > h2, a {
-    margin-right: 1rem;
+    gap: 1em;
 }
 
 .inlineheader > span {
-    margin-right: 0.5rem;
     padding: 0.2rem;
     color: white;
     background-color: #f06445;

@@ -22,7 +22,7 @@ app.get("/static/*", (rreq,rres) => {
 })
 
 app.get("/favicon.ico", (rreq,rres) => {
-    rres.sendFile(process.cwd()+"/website/static/")
+    rres.sendFile(process.cwd()+"/website/static/bs.ico")
 })
 
 app.get("/posts/*", (rreq,rres) => {
@@ -39,14 +39,18 @@ app.get("/posts/*", (rreq,rres) => {
     
 })
 
-app.post("/api/syncfrontpage", (rreq,rres) => {
+app.get("/urltoolbox", (rreq,rres) => {
+    rres.send("Under construction")
+})
+
+app.post("/api/sync", (rreq,rres) => {
     checkToken(rreq.query.auth,"fpupdate").then(checkResponse => {
         if (checkResponse === true) {
             if (rreq.headers["x-github-event"] == "ping") {
                 rres.sendStatus(200)
             } else if (rreq.headers["x-github-event"] == "push") {
-                execSync("git submodule update --remote")
-                logRequest(rres,rreq,200,"Synchronized Git submodules")
+                execSync("git pull")
+                logRequest(rres,rreq,200,"Ran git pull")
                 rres.sendStatus(200)
             } else {
                 logRequest(rres,rreq,400)
