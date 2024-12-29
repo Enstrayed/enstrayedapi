@@ -50,6 +50,7 @@ app.post("/api/sync", (rreq,rres) => {
                 rres.sendStatus(200)
             } else if (rreq.headers["x-github-event"] == "push") {
                 execSync("git pull")
+                globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
                 logRequest(rres,rreq,200,"Ran git pull")
                 rres.sendStatus(200)
             } else {
