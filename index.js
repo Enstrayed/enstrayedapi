@@ -18,7 +18,7 @@ const globalConfig = await fetch(`${process.env.API_DBHOST}/config/${process.env
         return response.json()
     }
 })
-var globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
+const globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
 // Returns ISO 8601 Date & 24hr time for UTC-7/PDT
 const startTime = new Date(new Date().getTime() - 25200000).toISOString().slice(0,19).replace('T',' ')
 
