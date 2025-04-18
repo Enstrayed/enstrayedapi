@@ -28,7 +28,15 @@ async function checkToken(token,scope) {
  */
 
 async function checkTokenNew(token,scope) {
-
+    return await db`select s.token, s.scopes, s.expires, u.username from sessions s join users u on s.owner = u.id where s.token = ${token}`.then(response => {
+        if (response.length === 0) {
+            return { result: false, owner: response[0]?.username}
+        } else if (response[0]?.scopes.split(",").includes(scope)) {
+            return { result: true, owner: response[0]?.username}
+        } else {
+            return { result: false, owner: response[0]?.username}
+        }
+    })
 }
 
-export {checkToken}
+export {checkToken, checkTokenNew}

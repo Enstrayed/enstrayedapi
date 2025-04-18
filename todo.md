@@ -3,3 +3,5 @@
 - [ ] GET /api/callback - Creates new token that is intended to be local to browser; e.g. can be used in turn to make longer lasting more specific tokens
 - [ ] POST /api/token - Allows owner to create a new token with customized scopes, comments & expiration date
 - [ ] DELETE /api/token - Invalidate a token
+- [ ] liberals/libnowplaying - Implement queryCider()
+- [ ] routes/nowplaying - Reimplement query order to Cider and then Jellyfin
