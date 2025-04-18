@@ -18,4 +18,17 @@ async function checkToken(token,scope) {
     })
 }
 
+/**
+ * New function to check if a token exists in the sessions table (authentication) and if it has the desired scope (authorization)
+ * @param {string} token Token as received by client
+ * @param {string} scope Desired scope for action
+ * @typedef {Object} Object containing the result and the username of the token owner
+ * @property {boolean} result Boolean result of if the check passed
+ * @property {string} owner Username of the token owner
+ */
+
+async function checkTokenNew(token,scope) {
+
+}
+
 export {checkToken}
