@@ -25,16 +25,17 @@ async function checkToken(token,scope) {
  * @typedef {Object} Object containing the result and the username of the token owner
  * @property {boolean} result Boolean result of if the check passed
  * @property {string} owner Username of the token owner
+ * @property {number} ownerId Database ID of the token owner
  */
 
 async function checkTokenNew(token,scope) {
-    return await db`select s.token, s.scopes, s.expires, u.username from sessions s join users u on s.owner = u.id where s.token = ${token}`.then(response => {
+    return await db`select s.*, u.username from sessions s join users u on s.owner = u.id where s.token = ${token}`.then(response => {
         if (response.length === 0) {
-            return { result: false, owner: response[0]?.username}
+            return { result: false, owner: response[0]?.username, ownerId: response[0]?.owner}
         } else if (response[0]?.scopes.split(",").includes(scope)) {
-            return { result: true, owner: response[0]?.username}
+            return { result: true, owner: response[0]?.username, ownerId: response[0]?.owner}
         } else {
-            return { result: false, owner: response[0]?.username}
+            return { result: false, owner: response[0]?.username, ownerId: response[0]?.owner}
         }
     })
 }
