@@ -7,7 +7,7 @@
  * @param {object} authresponse Optionally include result of auth response to include owner information for a token
  */
 function logRequest(response,request,code,extra,authresponse) {
-    console.log(`${request.get("cf-connecting-ip") ?? request.ip} ${authresponse.owner ?? ""}/${request.get("Authorization") ?? ""} ${request.method} ${request.path} returned ${code} ${extra ?? ""}`)
+    console.log(`${request.get("cf-connecting-ip") ?? request.ip} ${authresponse?.owner ?? ""}/${request.get("Authorization") ?? ""} ${request.method} ${request.path} returned ${code} ${extra ?? ""}`)
 }
 
 export { logRequest }
