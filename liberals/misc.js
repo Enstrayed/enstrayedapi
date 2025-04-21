@@ -20,4 +20,36 @@ function randomStringBase62(length) {
     return returnstring
 }
 
-export { randomStringBase16, randomStringBase62 }
+function getHumanReadableUserAgent(useragent) {
+    let formattedua = useragent.replace(/[\/()]/g," ").split(" ")
+    let os = ""
+    let browser = ""
+
+    if (formattedua.includes("Windows")) {
+        os += "Windows"
+    } else if (formattedua.includes("Macintosh")) {
+        os += "macOS"
+    } else if (formattedua.includes("iPhone")) {
+        os += "iOS"
+    } else if (formattedua.includes("Android")) {
+        os += "Android"
+    } else if (formattedua.includes("Linux")) {
+        os += "Linux"
+    } else {
+        os += "Other"
+    }
+
+    if (formattedua.includes("Firefox")) {
+        browser += "Firefox"
+    } else if (formattedua.includes("Chrome")) {
+        browser += "Chrome"
+    } else if (formattedua.includes("Safari")) {
+        browser += "Safari"
+    } else {
+        browser += "Other"
+    }
+
+    return `${os} ${browser}`
+}
+
+export { randomStringBase16, randomStringBase62, getHumanReadableUserAgent }
