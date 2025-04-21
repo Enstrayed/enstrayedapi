@@ -12,4 +12,8 @@ app.get("/api/debugtokencheck", (rreq,rres) => {
     })
 })
 
+app.get("/api/debugurl", (rreq,rres) => {
+    rres.send(`${rreq.protocol}://${rreq.get("Host")}`)
+})
+
 export { app }
