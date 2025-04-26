@@ -1,0 +1,79 @@
+body {
+    margin: 2em 0 0 0;
+    font-family: 'Segoe UI Variable', sans-serif;
+
+    background-color: #282828;
+    color: #F1F1F1;
+
+    display: grid;
+    place-items: center;
+
+
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2.5em;
+
+    padding: 2em;
+    background-color: #202020;
+    box-shadow: 0 0 1em 0 #202020;
+}
+
+.linkColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#nowplaying {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+#nowplaying > img {
+    height: 10em;
+}
+
+#nowplaying > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2em;
+    max-width: 14em;
+}
+
+#nowplaying .nowPlayingLine2 {
+    font-size: 1.4em;
+}
+
+.apiVersion {
+    margin: 0.8em 0 0.8em;
+}
+
+.marginBottom1em {
+    margin: 0 0 1em;
+}
+
+.blogPostsList > ul {
+    list-style-image: url('/static/icons/post.svg');
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+}
+
+a, a:link {
+    color: #FF5A36;
+}
+
+a:hover {
+    color: #ff8266;
+}
+
+a > img {
+    margin-right: 0.2em;
+}
