@@ -11,7 +11,7 @@ app.get("/", (rreq, rres) => {
     if (Date.now() < timeSinceLastQuery+10000) {
         rres.send(cachedResult)
     } else {
-        let indexFile = fs.readFileSync(process.cwd()+"/website/templates/indextemplate.html","utf-8")
+        let indexFile = fs.readFileSync(process.cwd()+"/website/templates/newindextemplate.html","utf-8")
         cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parseFiles()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
         rres.send(cachedResult)
     }
@@ -22,7 +22,7 @@ app.get("/static/*", (rreq,rres) => {
 })
 
 app.get("/favicon.ico", (rreq,rres) => {
-    rres.sendFile(process.cwd()+"/website/static/bs.ico")
+    rres.sendFile(process.cwd()+"/website/static/snow-leopard.ico")
 })
 
 app.get("/posts/*", (rreq,rres) => {

@@ -1,0 +1,43 @@
+html {
+    display: grid;
+    place-items: center;
+    background-color: #282828;
+}
+
+body {
+    margin: 2em 0 0 0;
+    font-family: 'Segoe UI Variable', sans-serif;
+
+    background-color: #202020;
+    color: #F1F1F1;
+
+    max-width: 80ch;
+    padding: 2em;
+    box-shadow: 0 0 1em 0 #202020;
+}
+
+a, a:link {
+    color: #FF5A36;
+}
+
+a:hover {
+    color: #ff8266;
+}
+
+.inlineheader {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.inlineheader h2 {
+    margin: 0;
+}
+
+.inlineheader > div > span {
+    padding: 0.2rem;
+    color: white;
+    background-color: #f06445;
+}
