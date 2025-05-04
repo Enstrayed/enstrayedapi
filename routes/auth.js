@@ -4,11 +4,37 @@ import { logRequest } from "../liberals/logging.js"
 import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.js"
 
 app.get("/api/auth/whoami", (rreq,rres) => {
-    rres.send("Non functional endpoint")
+    if (!rreq.cookies["APIToken"] && !rreq.get("Authorization")) {
+        rres.send({ "loggedIn": false, "username": "", "scopes": "" })
+    } else {
+        db`select s.scopes, u.username from sessions s join users u on s.owner = u.id where s.token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
+            if (dbRes.length > 0 && dbRes.length < 2) {
+                rres.send({ "loggedIn": true, "username": dbRes[0]?.username, "scopes": dbRes[0]?.scopes.split(",") })
+            } else {
+                rres.send({ "loggedIn": false, "username": "", "scopes": "" })
+            }
+        }).catch(dbErr => {
+            logRequest(rres,rreq,500,dbErr)
+            rres.status(500).send({ "loggedIn": false, "username": "", "scopes": "" })
+        })
+    }
 })
 
 app.get("/api/auth/login", (rreq,rres) => {
-    rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback`)
+
+    if (rreq.query.state === "redirect") {
+        if (!rreq.query.destination) {
+            rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback&state=none`)
+        } else {
+            let newState = `redirect_${btoa(rreq.query.destination).replace("/","-")}`
+            rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback&state=${newState}`)
+        }
+    } else if (rreq.query.state === "display" || rreq.query.state === "close") {
+        rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback&state=${rreq.query.state}`)
+    } else {
+        rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback&state=none`)
+    }
+
 })
 
 app.get("/api/auth/callback", (rreq,rres) => {
@@ -31,11 +57,23 @@ app.get("/api/auth/callback", (rreq,rres) => {
                             let newToken = randomStringBase62(64)
                             let newExpiration = Date.now() + 86400
                             let newComment = `Login token for ${getHumanReadableUserAgent(rreq.get("User-Agent"))} on ${rreq.get("cf-connecting-ip") ?? rreq.ip}`
-                            db`select * from users where oidc_username = ${fetchRes2.username};`.then(dbRes1 => {
-                                db`insert into sessions (token,owner,scopes,expires,comment) values (${newToken},${dbRes1[0]?.id},${fetchRes2.enstrayedapi_scopes},${newExpiration},${newComment})`.then(dbRes2 => {
-                                    rres.send(dbRes2)
-                                })
+
+                            db`insert into sessions (token,owner,scopes,expires,comment) values (${newToken},(select id from users where oidc_username = ${fetchRes2.username}),${fetchRes2.enstrayedapi_scopes},${newExpiration},${newComment});`.then(dbRes1 => {
+                                if (rreq.query.state.split("_")[0] === "redirect") {
+                                    let newDestination = atob(rreq.query.state.split("_")[1].replace("-","/"))
+                                    rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).redirect(newDestination)
+                                } else if (rreq.query.state === "display") {
+                                    rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).send(`Success! Your token is <code>${newToken}</code>`)
+                                } else if (rreq.query.state === "close") {
+                                    rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).send(`<script>document.addEventListener("DOMContentLoaded", () => {window.close();});</script> Success! You may now close this window.`)
+                                } else {
+                                    rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).send(`Success! No state was provided, so you can close this window.`)
+                                }
+                            }).catch(dbErr => {
+                                localError500(`Callback-Write-${dbErr}`)
                             })
+
+
                         })
                     }
                 }).catch(fetchErr2 => { // Fetch to userinfo endpoint failed for some other reason

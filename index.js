@@ -2,6 +2,8 @@ import * as fs from 'fs'
 import { execSync } from 'child_process'
 import postgres from 'postgres'
 import express, { json } from 'express'
+import cookieParser from 'cookie-parser'
+
 const app = express()
 
 if (!process.env.DATABASE_URI) {
@@ -24,6 +26,7 @@ export { app, fs, db, globalConfig, globalVersion }
 
 app.use(json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json
+app.use(cookieParser()) // Allows receiving cookies
 
 process.on('SIGTERM', function() {
     console.log("Received SIGTERM, exiting...")
