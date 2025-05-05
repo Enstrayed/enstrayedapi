@@ -1,4 +1,4 @@
-import { app, db, globalConfig } from "../index.js" // Get globals from index
+// import { app, db, globalConfig } from "../index.js" // Get globals from index
 import { checkTokenNew } from "../liberals/auth.js"
 import { logRequest } from "../liberals/logging.js"
 import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.js"
@@ -80,6 +80,7 @@ app.get("/api/auth/callback", (rreq,rres) => {
                                     let newDestination = atob(rreq.query.state.split("_")[1].replace("-","/"))
                                     rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).redirect(newDestination)
                                 } else if (rreq.query.state === "display") {
+                                    // Change this to not write the token to a cookie
                                     rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).send(`Success! Your token is <code>${newToken}</code>`)
                                 } else if (rreq.query.state === "close") {
                                     rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).send(`<script>document.addEventListener("DOMContentLoaded", () => {window.close();});</script> Success! You may now close this window.`)

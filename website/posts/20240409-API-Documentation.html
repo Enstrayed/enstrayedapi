@@ -106,5 +106,40 @@
     </div>
 
     <p>Returns all request headers in JSON.</p>
+
+    <div class="inlineheader">
+        <h2>/api/auth/whoami</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/new-db/routes/auth.js">auth.js:6</a>
+        <div><span>GET</span></div>
+    </div>
+    <p>Returns JSON with the username of the token owner as well as what scopes the token has access to.</p>
+
+    <div class="inlineheader">
+        <h2 id="jumplink_authlogin">/api/auth/login</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/new-db/routes/auth.js">auth.js:23</a>
+        <div><span>GET</span></div>
+    </div>
+    <p>Redirects the user to ECLS to login. The <code>state</code> parameter can be used to specify how the login flow will behave. The accepted "states" are:</p>
+    <ul>
+        <li><code>redirect</code> - Redirects the user to a page after logging in. This paramter requires the <code>destination</code> paramter to also be set with the URL the user will be redirected to.</li>
+        <li><code>display</code> - Displays the generated token to the user after login. Currently, this still writes the new token to the <code>APIToken</code> cookie, though this is planned to change.</li>
+        <li><code>close</code> - This will close the page after logging in. This requires the page to be opened with JavaScript otherwise it will not automatically close.</li>
+    </ul>
+
+    <div class="inlineheader">
+        <h2>/api/auth/logout</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/new-db/routes/auth.js">auth.js:40</a>
+        <div><span>GET</span></div>
+    </div>
+    <p>Invalidates the token used to access the endpoint.</p>
+
+    <div class="inlineheader">
+        <h2>/api/auth/callback</h2>
+        <a href="https://github.com/Enstrayed/enstrayedapi/blob/new-db/routes/auth.js">auth.js:57</a>
+        <div><span>GET</span></div>
+    </div>
+    <p><b>Internal Use Only. </b>This is the endpoint used by ECLS to finish the login flow. It will write the newly created token to the <code>APIToken</code> cookie as well as performing the action set by <code>state</code>, see <a href="#jumplink_authlogin">login endpoint</a>.</p>
+
+    
 </body>
 </html>
