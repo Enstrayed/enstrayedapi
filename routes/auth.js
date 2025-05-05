@@ -5,7 +5,7 @@ import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.
 
 app.get("/api/auth/whoami", (rreq,rres) => {
     if (!rreq.cookies["APIToken"] && !rreq.get("Authorization")) {
-        rres.send({ "loggedIn": false, "username": "", "scopes": "" })
+        rres.status(400).send({ "loggedIn": false, "username": "", "scopes": "" })
     } else {
         db`select s.scopes, u.username from sessions s join users u on s.owner = u.id where s.token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
             if (dbRes.length > 0 && dbRes.length < 2) {
@@ -35,6 +35,23 @@ app.get("/api/auth/login", (rreq,rres) => {
         rres.redirect(`${globalConfig.oidc.authorizeUrl}?client_id=${globalConfig.oidc.clientId}&response_type=code&scope=openid enstrayedapi&redirect_uri=${rreq.protocol}://${rreq.get("Host")}/api/auth/callback&state=none`)
     }
 
+})
+
+app.get("/api/auth/logout", (rreq,rres) => {
+    if (rreq.cookies["APIToken"] || rreq.get("Authorization")) {
+        db`delete from sessions where token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
+            if (dbRes.count > 0) {
+                rres.send("Success")
+            } else {
+                rres.status(400).send("Error: Token does not exist.")
+            }
+        }).catch(dbErr => {
+            logRequest(rres,rreq,500,dbErr)
+            rres.status(500).send("Error: Exception occured while invalidating token, details: "+dbErr)
+        })
+    } else {
+        rres.status(400).send("Error: Missing token or authorization header, you may not be logged in.")
+    }
 })
 
 app.get("/api/auth/callback", (rreq,rres) => {
@@ -96,6 +113,14 @@ app.post("/api/auth/token", (rreq,rres) => {
 })
 
 app.delete("/api/auth/token", (rreq,rres) => {
+    rres.send("Non functional endpoint")
+})
+
+app.get("/api/auth/tokenlist", (rreq,rres) => {
+    rres.send("Non functional endpoint")
+})
+
+app.get("/api/auth/nuke", (rreq,rres) => {
     rres.send("Non functional endpoint")
 })
 

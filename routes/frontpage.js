@@ -39,10 +39,6 @@ app.get("/posts/*", (rreq,rres) => {
     
 })
 
-app.get("/urltoolbox", (rreq,rres) => {
-    rres.send("Under construction")
-})
-
 function parseFiles() {
     let files = fs.readdirSync(process.cwd()+"/website/posts")
     let result = ""
