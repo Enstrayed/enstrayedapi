@@ -1,4 +1,4 @@
-// import { app, db, globalConfig } from "../index.js" // Get globals from index
+import { app, db, globalConfig } from "../index.js" // Get globals from index
 import { checkTokenNew } from "../liberals/auth.js"
 import { logRequest } from "../liberals/logging.js"
 import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.js"

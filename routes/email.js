@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 })
 
 app.post("/api/sendemail", (rreq,rres) => {
-    checkTokenNew(rreq.get("Authorization"),"email").then(authRes => {
+    checkTokenNew(rreq,"email").then(authRes => {
         if (authRes.result === false) {
             rres.sendStatus(401)
         } else if (authRes.result === true) { 
