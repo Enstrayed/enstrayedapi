@@ -1,9 +1,9 @@
 body {
-    margin: 2em 0 0 0;
+    margin: 0;
     font-family: 'Segoe UI Variable', sans-serif;
 
     background-color: #282828;
-    color: #F1F1F1;
+    
 
     display: grid;
     place-items: center;
@@ -18,8 +18,11 @@ body {
     gap: 2.5em;
 
     padding: 2em;
-    background-color: #202020;
+    background-color: #fdfdfd;
     box-shadow: 0 0 1em 0 #202020;
+
+    position: relative;
+    margin-top: 96px;
 }
 
 .linkColumn {
@@ -48,7 +51,7 @@ body {
 }
 
 #nowplaying .nowPlayingLine2 {
-    font-size: 1.4em;
+    font-size: 1.25em;
 }
 
 .apiVersion {
@@ -68,7 +71,7 @@ body {
 }
 
 a, a:link {
-    color: #FF5A36;
+    color: #366FFF;
 }
 
 a:hover {
@@ -77,4 +80,10 @@ a:hover {
 
 a > img {
     margin-right: 0.2em;
+}
+
+#miauMiau {
+    position: absolute;
+    top: -90px;
+    right: 9%;
 }
