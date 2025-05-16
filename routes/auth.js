@@ -5,7 +5,7 @@ import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.
 
 app.get("/api/auth/whoami", (rreq,rres) => {
     if (!rreq.cookies["APIToken"] && !rreq.get("Authorization")) {
-        rres.status(400).send({ "loggedIn": false, "username": "", "scopes": "" })
+        rres.send({ "loggedIn": false, "username": "", "scopes": "" })
     } else {
         db`select s.scopes, u.username from sessions s join users u on s.owner = u.id where s.token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
             if (dbRes.length > 0 && dbRes.length < 2) {

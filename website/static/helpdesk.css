@@ -1,0 +1,78 @@
+html {
+    font-family: 'Segoe UI Variable', sans-serif;
+
+    background-color: #282828;
+}
+
+body {
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    height: 100vh;
+}
+
+.headerbar {
+    background-color: #fff;
+    padding: 0 2em 0 2em;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    align-items: center;
+}
+
+
+.headerbarright {
+    margin-left: auto;
+}
+
+.maincontent {
+    display: grid;
+    place-items: center;
+}
+
+.cardrow {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.cardrow > div {
+    background-color: #fff;
+    padding: 2em;
+}
+
+.cardrow > div > h1 {
+    margin: 0 0 0.5em 0;
+}
+
+.linkColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+a, a:link {
+    color: #366FFF;
+}
+
+a > img {
+    margin-right: 0.2em;
+}
+
+dialog {
+    padding: 2em;
+    border: none;
+}
+
+dialog > h2 {
+    margin: 0 0 0.5em 0;
+}
+
+dialog > button {
+    float: right;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
