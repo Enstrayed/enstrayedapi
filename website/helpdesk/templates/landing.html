@@ -4,30 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enstrayed Helpdesk</title>
-    <link rel="stylesheet" href="/static/helpdesk.css">
-    <script>
-        var globalLoggedIn = false
-
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch(`/api/auth/whoami`).then(fetchRes => {
-                fetchRes.json().then(jsonRes => {
-                    if (jsonRes.loggedIn) {
-                        globalLoggedIn = true
-                        document.getElementById("loginButton").innerText = `Logout ${jsonRes.username}`
-                    } else {
-                        globalLoggedIn = false
-                        document.getElementById("loginButton").innerText = `Login`
-                    }
-                })
-            })
-        })
-
-        function loginFunction() {
-            if (globalLoggedIn === true) {
-
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/static/helpdesk/helpdesk.css">
+    <script src="/static/helpdesk/login.js"></script>
 </head>
 <body>
     
@@ -88,9 +66,9 @@
         </div>
     </div>
     <dialog id="globalDialog">
-        <h2>Warning</h2>
-        <p>This is a warning</p>
-        <button>woag</button>
+        <h2 id="globalDialogHeader">Warning</h2>
+        <p id="globalDialogText">This is a warning</p>
+        <button onclick="document.getElementById('globalDialog').close()">Dismiss</button>
     </dialog>
 </body>
 </html>

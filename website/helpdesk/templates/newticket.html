@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enstrayed Helpdesk: New Ticket</title>
+    <link rel="stylesheet" href="/static/helpdesk/helpdesk.css">
+    <script src="/static/helpdesk/login.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('formSelection').value = 'none'
+            document.getElementById('formSelection').addEventListener('change', function() {
+                useGlobalDialog(`Info`, `You selected ${this.value}`)
+            })
+
+            fetch(`/api/helpdesk/forms/manifest.json`).then(fetchRes => {
+                fetchRes.json().then(jsonRes => {
+                    for (let x in jsonRes) {
+                        let newElement = document.createElement('option')
+                        newElement.value = x
+                        newElement.textContent = jsonRes[x]
+                        document.getElementById('formSelection').appendChild(newElement)
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    
+    <div class="headerbar">
+        <h1>Enstrayed Helpdesk</h1>
+        <a href="/helpdesk">Main Page</a>
+        <a href="/helpdesk/articles">Knowledgebase</a>
+        
+        <div class="headerbarright">
+            <button id="loginButton" onclick="loginFunction()">Login</button>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="newticketmaincontent">
+            <h2>New Ticket</h2>
+            <label for="formSelection">Please select a form: </label>
+            <select name="Form Selection" id="formSelection">
+                <option value="none" disabled selected>-- Choose From List --</option>
+            </select>
+            <hr>
+        </div>
+    </div>
+    <dialog id="globalDialog">
+        <h2 id="globalDialogHeader">Warning</h2>
+        <p id="globalDialogText">This is a warning</p>
+        <button onclick="document.getElementById('globalDialog').close()">Dismiss</button>
+    </dialog>
+</body>
+</html>

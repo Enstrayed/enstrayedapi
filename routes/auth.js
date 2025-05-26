@@ -43,14 +43,14 @@ app.get("/api/auth/logout", (rreq,rres) => {
             if (dbRes.count > 0) {
                 rres.send("Success")
             } else {
-                rres.status(400).send("Error: Token does not exist.")
+                rres.status(400).send("Token does not exist.")
             }
         }).catch(dbErr => {
             logRequest(rres,rreq,500,dbErr)
-            rres.status(500).send("Error: Exception occured while invalidating token, details: "+dbErr)
+            rres.status(500).send("Exception occured while invalidating token, details: "+dbErr)
         })
     } else {
-        rres.status(400).send("Error: Missing token or authorization header, you may not be logged in.")
+        rres.status(400).send("Missing token or authorization header, you may not be logged in.")
     }
 })
 

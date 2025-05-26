@@ -37,9 +37,14 @@ body {
     gap: 2em;
 }
 
-.cardrow > div {
+.cardrow > div, .newticketmaincontent {
     background-color: #fff;
     padding: 2em;
+}
+
+.newticketmaincontent {
+    min-width: 80ch;
+    max-width: 80ch;
 }
 
 .cardrow > div > h1 {
@@ -65,7 +70,7 @@ dialog {
     border: none;
 }
 
-dialog > h2 {
+dialog > h2, .newticketmaincontent > h2 {
     margin: 0 0 0.5em 0;
 }
 
