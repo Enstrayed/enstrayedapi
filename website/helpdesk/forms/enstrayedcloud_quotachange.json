@@ -1,0 +1,14 @@
+{
+    "anonymousSubmission": false,
+    "form": {
+        "description": {
+            "type": "span",
+            "content": "Important: <ul> <li>Your Enstrayed Cloud quota does NOT affect your EOES mailbox quota.</li> <li>Your request will be reviewed and may be denied for any reason.</li> </ul>"
+        },
+        "newquota": {
+            "type": "text",
+            "content": "New quota (in GB)",
+            "required": true
+        }
+    }
+}

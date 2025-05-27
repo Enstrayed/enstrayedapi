@@ -1,0 +1,21 @@
+{
+    "anonymousSubmission": false,
+    "form": {
+        "description": {
+            "type": "span",
+            "content": "Please enter the information you wish to change. You do not need to enter existing information if it will remain the same. <br><br> <b>Important! If you request a username or Email address change, your access to services such as EOES or Jellyfin may be disrupted. You will be contacted in advance if this applies to you.</b>"
+        },
+        "newusername": {
+            "type": "text",
+            "content": "New Username"
+        },
+        "newdisplayname": {
+            "type": "text",
+            "content": "New Display Name"
+        },
+        "newemail": {
+            "type": "text",
+            "content": "New Email Address"
+        }
+    }
+}
