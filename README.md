@@ -1,14 +1,11 @@
-# Enstrayed API
-This repository contains the code for my personal web API written in JavaScript using the Express framework. 
-
-## Documentation
-This file contains documentation relevant for development and deployment, but not necessarily usage. Information for all endpoints is available [on my website](https://enstrayed.com/posts/20240409-API-Documentation.html).
-
-## Issues
-If you would like to report a bug or security issue, please open a GitHub issue. If you are the operator of a service this application accesses, use the contact information provided during registration with your service to contact me directly.
+## Note for Visitors
+* This README mainly contains information for operation but not usage. API documentation is available [here](https://enstrayed.com/posts/20240409-API-Documentation.html).
+* Have feedback or experiencing a problem with an endpoint? Please [open a GitHub issue](https://github.com/Enstrayed/enstrayedapi/issues/new).
+* Security problem? [Open a ticket here](https://helpdesk.enstrayed.com/open.php) with the topic set as 'Responsible Disclosure'.
+* This code is unlicensed but I don't really care if you use parts of it (I don't know why you would though). 
 
 ## Configuration
-
+TODO: Rewrite
 
 <details> <summary>Configuration Template</summary>
 
@@ -19,7 +16,7 @@ If you would like to report a bug or security issue, please open a GitHub issue.
 </details>
 
 ## Docker
-In production, this application is designed to be run in Docker, and the container built by pulling the latest commit from the main branch. As such, deploying this application is just a matter of creating a directory and copying the Dockerfile:
+TODO: Rewrite & add Komodo TOML files
 
 ```dockerfile
 FROM node:22
@@ -39,6 +36,3 @@ ENTRYPOINT [ "node", "index.js" ]
 ```
 
 </details>
-
-## License
-If for whatever reason you want to, you are free to adapt this code for your own projects or as reference. However, this software is provided as-is with no warranty or agreement to support it. 

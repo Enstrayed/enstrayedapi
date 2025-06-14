@@ -7,7 +7,7 @@ import { marked } from "marked"
 var timeSinceLastQuery = Date.now()-10000
 var cachedResult = ""
 
-app.get("/", (rreq, rres) => {
+app.get("/indexbeta", (rreq, rres) => {
     if (Date.now() < timeSinceLastQuery+10000) {
         rres.send(cachedResult)
     } else {
@@ -15,6 +15,10 @@ app.get("/", (rreq, rres) => {
         cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parseFiles()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
         rres.send(cachedResult)
     }
+})
+
+app.get("/", (rreq, rres) => {
+    rres.sendFile(process.cwd()+"/website/templates/construction.html")
 })
 
 app.get("/static/*", (rreq,rres) => {
