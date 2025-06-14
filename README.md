@@ -5,34 +5,68 @@
 * This code is unlicensed but I don't really care if you use parts of it (I don't know why you would though). 
 
 ## Configuration
-TODO: Rewrite
 
-<details> <summary>Configuration Template</summary>
+<details> <summary>Configuration</summary>
 
 ```json
-
+{
+    "oidc": {
+        "clientId": "nowaybuddy",
+        "tokenUrl": "https://login.enstrayed.com/application/o/token/",
+        "userinfoUrl": "https://login.enstrayed.com/application/o/userinfo/",
+        "authorizeUrl": "https://login.enstrayed.com/application/o/authorize/",
+        "clientSecret": "nowaybuddy"
+    },
+    "email": {
+        "host": "orenco.enstrayed.com",
+        "password": "nowaybuddy",
+        "username": "nowaybuddy"
+    },
+    "nowplaying": {
+        "cider": {
+            "hosts": [],
+            "apiKeys": []
+        },
+        "lastfm": {
+            "apiKey": "nowaybuddy",
+            "target": "enstrayed"
+        },
+        "jellyfin": {
+            "host": "http://hawthorne.pizzly-catfish.ts.net:8096",
+            "apiKey": "nowaybuddy",
+            "target": "nathan",
+            "hostPublic": "https://jellyfin.enstrayed.com"
+        }
+    }
+}
 ```
 
 </details>
 
-## Docker
-TODO: Rewrite & add Komodo TOML files
+<details> <summary>Komodo Files</summary>
 
-```dockerfile
-FROM node:22
-WORKDIR /app
 
-RUN git clone https://github.com/enstrayed/enstrayedapi .
-RUN npm install
-
-USER node
-ENTRYPOINT [ "node", "index.js" ]
+```toml
+[[build]]
+name = "enstrayedapi"
+[build.config]
+builder = "local"
+repo = "Enstrayed/enstrayedapi"
+webhook_secret = "nowaybuddy"
 ```
-
-<details> <summary>Docker Compose File</summary>
-
-```yaml
-
+```toml
+[[deployment]]
+name = "enstrayedapi"
+[deployment.config]
+server = "hawthorne"
+image.type = "Build"
+image.params.build = "enstrayedapi"
+network = "caddy"
+restart = "unless-stopped"
+extra_args = ["--network=postgres"]
+environment = """
+DATABASE_URI=postgres://nowaybuddy:nowaybuddy@postgres:5432/api
+"""
 ```
 
 </details>
