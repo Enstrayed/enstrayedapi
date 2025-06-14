@@ -50,9 +50,10 @@ h2 {
     align-items: center;
     margin-top: 2rem;
     gap: 1em;
+    flex-wrap: wrap;
 }
 
-.inlineheader > span {
+.inlineheader > div > span {
     padding: 0.2rem;
     color: white;
     background-color: #f06445;

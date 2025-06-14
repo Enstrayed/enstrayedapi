@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enstrayed Helpdesk</title>
+    <link rel="stylesheet" href="/static/helpdesk/helpdesk.css">
+    <script src="/static/helpdesk/login.js"></script>
+</head>
+<body>
+    
+    <div class="headerbar">
+        <h1>Enstrayed Helpdesk</h1>
+        <a href="/helpdesk/ticket/new">Open Ticket</a>
+        <a href="/helpdesk/articles">Knowledgebase</a>
+        
+        <div class="headerbarright">
+            <button id="loginButton" onclick="loginFunction()">Login</button>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="cardrow">
+            <div>
+                <h1>How can I help you?</h1>
+                <div class="linkColumn">
+                    <div>
+                        <span>I'm filing a legal request, such as a DMCA takedown or other legal matter</span><br>
+                        <a href=""><img src="/static/icons/arrow-right.svg" alt="">Click here to start a Legal Request</a>
+                    </div>
+                    <div>
+                        <span>I'm responsibly disclosing a problem, such a security vulnerability</span><br>
+                        <a href=""><img src="/static/icons/arrow-right.svg" alt="">Click here to start a Responsible Disclosure</a>
+                    </div>
+                    <div>
+                        <span>I need help logging into my ECLS account</span><br>
+                        <a href=""><img src="/static/icons/external.svg" alt="">Click here to reset your ECLS password</a><br>
+                        <a href=""><img src="/static/icons/arrow-right.svg" alt="">Click here to start ECLS account recovery</a>
+                    </div>
+                    <div>
+                        <span>I have another question or need to get in contact</span><br>
+                        <a href=""><img src="/static/icons/arrow-right.svg" alt="">Click here to start a General Inquiry</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h1>Popular Articles</h1>
+                <div class="linkColumn">
+                    <div>
+                        <span>How do I use Security Keys in ECLS?</span><br>
+                        <a href=""><img src="/static/icons/post.svg" alt="">Important ECLS FIDO2/Webauthn/Passkey Information</a>
+                    </div>
+                    <div>
+                        <span>How do I login to Jellyfin?</span><br>
+                        <a href=""><img src="/static/icons/post.svg" alt="">Logging into Jellyfin</a>
+                    </div>
+                    <div>
+                        <span>How do I change my ECLS password?</span><br>
+                        <a href=""><img src="/static/icons/post.svg" alt="">Change ECLS Password</a>
+                    </div>
+                    <div>
+                        <span>How do I use federation features in Enstrayed Cloud?</span><br>
+                        <a href=""><img src="/static/icons/post.svg" alt="">Enstrayed Cloud Federation Features</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <dialog id="globalDialog">
+        <h2 id="globalDialogHeader">Warning</h2>
+        <p id="globalDialogText">This is a warning</p>
+        <button onclick="document.getElementById('globalDialog').close()">Dismiss</button>
+    </dialog>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "title": "ECLS: Delete Account",
+    "form": {
+        "description": {
+            "type": "span",
+            "content": ""
+        },
+        "confirmation": {
+            "type": "checkbox",
+            "content": "I have read all of the above and understand this action is irreverisble",
+            "required": true
+        }
+    }
+}

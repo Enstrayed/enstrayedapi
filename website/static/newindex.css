@@ -1,0 +1,89 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI Variable', sans-serif;
+
+    background-color: #282828;
+    
+
+    display: grid;
+    place-items: center;
+
+
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2.5em;
+
+    padding: 2em;
+    background-color: #fdfdfd;
+    box-shadow: 0 0 1em 0 #202020;
+
+    position: relative;
+    margin-top: 96px;
+}
+
+.linkColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#nowplaying {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+#nowplaying > img {
+    height: 10em;
+}
+
+#nowplaying > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2em;
+    max-width: 14em;
+}
+
+#nowplaying .nowPlayingLine2 {
+    font-size: 1.25em;
+}
+
+.apiVersion {
+    margin: 0.8em 0 0.8em;
+}
+
+.marginBottom1em {
+    margin: 0 0 1em;
+}
+
+.blogPostsList > ul {
+    list-style-image: url('/static/icons/post.svg');
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+    gap: 0.5em;
+}
+
+a, a:link {
+    color: #366FFF;
+}
+
+a:hover {
+    color: #ff8266;
+}
+
+a > img {
+    margin-right: 0.2em;
+}
+
+#miauMiau {
+    position: absolute;
+    top: -90px;
+    right: 9%;
+}

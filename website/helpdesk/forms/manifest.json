@@ -1,0 +1,10 @@
+{
+    "general_inquiry": "General Inquiry",
+    "legalrequest": "Legal Request",
+    "responsibledisclosure": "Responsible Disclosure",
+    "general_techsupport": "General Technical Support",
+    "ecls_deleteaccount": "ECLS: Delete Account",
+    "ecls_passwordreset": "ECLS: Password Reset",
+    "ecls_personalinfochange": "ECLS: Personal Information Change",
+    "enstrayedcloud_quotachange": "Enstrayed Cloud: Quota Change"
+}

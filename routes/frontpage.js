@@ -7,14 +7,18 @@ import { marked } from "marked"
 var timeSinceLastQuery = Date.now()-10000
 var cachedResult = ""
 
-app.get("/", (rreq, rres) => {
+app.get("/indexbeta", (rreq, rres) => {
     if (Date.now() < timeSinceLastQuery+10000) {
         rres.send(cachedResult)
     } else {
-        let indexFile = fs.readFileSync(process.cwd()+"/website/templates/indextemplate.html","utf-8")
+        let indexFile = fs.readFileSync(process.cwd()+"/website/templates/newindextemplate.html","utf-8")
         cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parseFiles()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
         rres.send(cachedResult)
     }
+})
+
+app.get("/", (rreq, rres) => {
+    rres.sendFile(process.cwd()+"/website/templates/construction.html")
 })
 
 app.get("/static/*", (rreq,rres) => {
@@ -22,7 +26,7 @@ app.get("/static/*", (rreq,rres) => {
 })
 
 app.get("/favicon.ico", (rreq,rres) => {
-    rres.sendFile(process.cwd()+"/website/static/bs.ico")
+    rres.sendFile(process.cwd()+"/website/static/snow-leopard.ico")
 })
 
 app.get("/posts/*", (rreq,rres) => {
@@ -37,10 +41,6 @@ app.get("/posts/*", (rreq,rres) => {
         rres.sendFile(process.cwd()+"/website/posts/"+rreq.url.replace("/posts/",""))
     }
     
-})
-
-app.get("/urltoolbox", (rreq,rres) => {
-    rres.send("Under construction")
 })
 
 function parseFiles() {

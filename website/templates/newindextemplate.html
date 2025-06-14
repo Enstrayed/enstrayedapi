@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enstrayed.com</title>
+    <meta property="og:title" content="Enstrayed.com">
+
+    <meta name="description" content="Welcome to Enstrayed.com">
+    <meta property="og:description" content="Welcome to Enstrayed.com">
+
+    <meta property="og:url" content="https://enstrayed.com">
+    <meta property="og:image" content="https://enstrayed.com/static/snowleopard.png">
+    <meta property="og:color" content="#FF5A36">
+
+    <link rel="stylesheet" href="/static/newindex.css">
+    <script>
+        fetch("/api/nowplayingbeta?format=html").then(response => response.text()).then(response => {document.getElementById("nowplaying").innerHTML = response})
+    </script>
+    <script>
+        function rerollBlogPostsHeaderText() {
+            let adjectives = [ "Assorted", "Random", "Various", "Miscellaneous", "Different", "Eclectic", "Mixed", "Profound"];
+            document.getElementById("blogPostsHeader").innerHTML = adjectives[Math.floor(Math.random() * adjectives.length)] + " Notes";
+        }
+        
+        rerollBlogPostsHeaderText();
+    </script>
+</head>
+<body>
+    
+    <div class="mainContent">
+        <img src="/static/snow-leopard.svg" alt="Snow Leopard Icon" width="96" id="miauMiau">
+        <div>
+            <!-- <img src="/static/orange-globe.svg" alt="Globe Icon" width="64"> -->
+            
+            <h1>Welcome to Enstrayed.com</h1>
+            <div class="linkColumn">
+                <div>
+                    <span>I received an Email from @enstrayed.com</span><br>
+                    <a href="https://helpdesk.enstrayed.com"><img src="/static/icons/external.svg" alt="">Click here for information about EOES</a>
+                </div>
+                <div>
+                    <span>I need help with an Enstrayed.com web service</span><br>
+                    <a href="https://helpdesk.enstrayed.com"><img src="/static/icons/external.svg" alt="">Click here to visit the Helpdesk</a>
+                </div>
+                <div>
+                    <a href="/urltoolbox"><img src="/static/icons/link.svg" alt="">URL Toolbox</a>
+                </div>
+                <div>
+                    <a href="/posts/20240409-API-Documentation.html"><img src="/static/icons/link.svg" alt="">API Documentation</a>
+                </div>
+                <div>
+                    <a href="https://downloads.enstrayed.com"><img src="/static/icons/link.svg" alt="">Downloads</a>
+                </div>
+                <div class="apiVersion">
+                    <!--SSR_APIVERSION-->
+                </div>
+            </div>
+        </div>
+        <div>
+            <!-- <img src="/static/snow-leopard.svg" alt="Snow Leopard Icon" width="64"> -->
+            <h1>@Enstrayed</h1>
+            <div class="linkColumn marginBottom1em">
+                <a href="https://twitter.com/enstrayed"><img src="/static/icons/twitter.svg" alt="">Twitter</a>
+                <a href="https://github.com/enstrayed"><img src="/static/icons/github.svg" alt="">GitHub</a>
+            </div>
+            
+            <div class="blogPostsList">
+                <h2 id="blogPostsHeader" onclick="rerollBlogPostsHeaderText()">Notes</h2>
+                <ul>
+                    <!--SSR_BLOGPOSTS-->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="nowplaying"></div>
+</body>
+</html>

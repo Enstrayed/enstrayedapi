@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokenMan</title>
+    <style>
+        body {
+            font-family: "Segoe UI Variable", sans-serif;
+            background-color: #111;
+            color: #fff;
+        }
+    </style>
+    <script>
+        function loginFunction() {
+            let loginWindow = window.open(`http://bottleneck.pizzly-catfish.ts.net:8081/api/auth/login?state=close`,`_blank`)
+            let loginWatcher = setInterval(() => {
+                if (loginWindow.closed) {
+                    fetch(`http://bottleneck.pizzly-catfish.ts.net:8081/api/auth/whoami`).then(fetchRes => {
+                        fetchRes.json().then(jsonRes => {
+                            if (jsonRes.loggedIn) {
+                                document.getElementById("loggedInText").innerText = `Logged in as ${jsonRes.username} with scopes ${jsonRes.scopes.join(", ")}`
+                                document.getElementById("loginButton").disabled = true
+                                document.getElementById("logoutButton").disabled = false
+                                
+                            } else {
+                                alert("An error occured during login.")
+                            }
+                            clearInterval(loginWatcher);
+                        })
+                    })
+                    
+                }
+            }, 500);
+        }
+
+        function logoutFunction() {
+            fetch(`http://bottleneck.pizzly-catfish.ts.net:8081/api/auth/logout`).then(fetchRes => {
+                if (fetchRes.status == 200) {
+                    document.getElementById("loggedInText").innerText = `Not Logged In`
+                    document.getElementById("loginButton").disabled = false
+                    document.getElementById("logoutButton").disabled = true
+                } else {
+                    fetchRes.text().then(text => {
+                        alert("An error occured during logout: " + text)
+                    })
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <h1>TokenMan</h1>
+    <div>
+        <button onclick="loginFunction()" id="loginButton">Login</button>
+        <button onclick="logoutFunction()" id="logoutButton" disabled="true">Logout</button>
+        <span id="loggedInText">Not Logged In</span>
+    </div>
+</body>
+</html>

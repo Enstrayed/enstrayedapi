@@ -27,7 +27,7 @@ async function queryLastfm() {
                         "artUrl": response.recenttracks.track[0].image[3]["#text"],
                         "link": response.recenttracks.track[0].url
                     },
-                    "html": `<img src="${response.recenttracks.track[0].image[3]["#text"]}" alt="Album Art" style="width: 10em;"> <div class="textlist"> <p>I'm listening to</p> <h3>${response.recenttracks.track[0].name} by ${response.recenttracks.track[0].artist["#text"]}</h3> <p>from ${response.recenttracks.track[0].album["#text"]}</p> <a href="${response.recenttracks.track[0].url}" class="noindent">View on Last.fm</a></div>`
+                    "html": `<img src="${response.recenttracks.track[0].image[3]["#text"]}" alt="Album Art"> <div> <span>I'm listening to</span> <span>${response.recenttracks.track[0].name} by ${response.recenttracks.track[0].artist["#text"]}</span> <span>from ${response.recenttracks.track[0].album["#text"]}</span> <a href="${response.recenttracks.track[0].url}" class="noindent">View on Last.fm</a></div>`
                 }
             }
         }
@@ -60,7 +60,7 @@ async function queryJellyfin() {
                     "artUrl": `${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary`,
                     "link": `https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}`
                 },
-                "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art" style="width: 10em;"> <div> <h4>I'm listening to</h4> <h3>${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</h3> <h4>from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</h4> <a href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}">View on Last.fm</a></div>`
+                "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art"> <div> <span class="nowPlayingLine1">I'm listening to</span> <span class="nowPlayingLine2">${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</span> <span class="nowPlayingLine3">from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</span> <a class="nowPlayingLine4" href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}">View on Last.fm</a></div>`
             }
         }
 

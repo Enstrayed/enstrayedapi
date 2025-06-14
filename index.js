@@ -1,31 +1,32 @@
 import * as fs from 'fs'
 import { execSync } from 'child_process'
+import postgres from 'postgres'
 import express, { json } from 'express'
+import cookieParser from 'cookie-parser'
+
 const app = express()
 
-if (!process.env.API_DBHOST || !process.env.API_DBCRED) {
-    console.log("FATAL: API_DBHOST and API_DBCRED must be set")
+if (!process.env.DATABASE_URI) {
+    console.log("FATAL: DATABASE_URI must be set")
     process.exit(1)
 }
 
-const globalConfig = await fetch(`${process.env.API_DBHOST}/config/${process.env.API_DBCRED.split(":")[0]}`,{
-    headers: { "Authorization": `Basic ${btoa(process.env.API_DBCRED)}`}
-}).then(response => {
-    if (response.status !== 200) {
-        console.log(`FATAL: Failed to download configuration: ${response.status} ${response.statusText}`)
-        process.exit(1)
-    } else {
-        return response.json()
-    }
+const db = postgres(process.env.DATABASE_URI)
+
+const globalConfig = await db`select content from config where id = ${process.env.CONFIG_OVERRIDE ?? 'production'}`.then(response => {return response[0]["content"]}).catch(error => {
+    console.log(`FATAL: Error occured in downloading configuration: ${error}`)
+    process.exit(1)
 })
+
 const globalVersion = execSync(`git show --oneline -s`).toString().split(" ")[0]
 // Returns ISO 8601 Date & 24hr time for UTC-7/PDT
 const startTime = new Date(new Date().getTime() - 25200000).toISOString().slice(0,19).replace('T',' ')
 
-export { app, fs, globalConfig, globalVersion }
+export { app, fs, db, globalConfig, globalVersion }
 
 app.use(json()) // Allows receiving JSON bodies
 // see important note: https://expressjs.com/en/api.html#express.json
+app.use(cookieParser()) // Allows receiving cookies
 
 process.on('SIGTERM', function() {
     console.log("Received SIGTERM, exiting...")
