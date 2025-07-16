@@ -51,6 +51,25 @@ body {
     margin: 0 0 0.5em 0;
 }
 
+.articlecontent {
+    background-color: #fff;
+    padding: 2em;
+    margin: 2em 0 2em;
+    max-width: 100ch;
+}
+
+.articlecontent > h1 {
+    margin: 0 0 0.5em;
+}
+
+.articlecontent > ol > li {
+    margin: 0 0 0.2em;
+}
+
+.articlecontent img {
+    max-width: 100%;
+}
+
 .linkColumn {
     display: flex;
     flex-direction: column;

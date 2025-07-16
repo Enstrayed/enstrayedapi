@@ -65,7 +65,7 @@ network = "caddy"
 restart = "unless-stopped"
 extra_args = ["--network=postgres"]
 environment = """
-DATABASE_URI=postgres://nowaybuddy:nowaybuddy@postgres:5432/api
+DATABASE_URL=postgres://nowaybuddy:nowaybuddy@postgres:5432/api
 """
 ```
 

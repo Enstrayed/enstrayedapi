@@ -6,7 +6,7 @@ html {
 
 body {
     margin: 2em 0 0 0;
-    font-family: 'Segoe UI Variable', sans-serif;
+    font-family: 'Segoe UI Variable Text', sans-serif;
 
     background-color: #202020;
     color: #F1F1F1;
@@ -40,4 +40,23 @@ a:hover {
     padding: 0.2rem;
     color: white;
     background-color: #f06445;
+}
+
+p {
+    line-height: 120%;
+}
+
+code {
+    background: #181818;
+    line-height: 130%;
+    padding: 0 0.1rem 0;
+    font-family: Consolas, monospace;
+}
+
+pre code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    background: #181818;
+    padding: 1rem;
 }

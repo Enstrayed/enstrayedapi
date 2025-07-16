@@ -16,18 +16,11 @@
 <body>
     <a href="/">Return to enstrayed.com</a>
     <h1>API Documentation</h1>
-    <p>This page was last updated 2025-04-26.</p>
+    <p>This page was last updated 2025-07-08.</p>
 
     <p>Source Code & Issue Tracker: <a href="https://github.com/enstrayed/enstrayedapi">github.com/enstrayed/enstrayedapi</a></p>
 
     <hr>
-
-    <div class="inlineheader">
-        <h2>Important Note</h2>
-    </div>
-
-    <p>Multiple API endpoints are being rewritten/added, especially relating to authentication & authorization, as part of a database change to Postgres. These changes are being made in the <a href="https://github.com/Enstrayed/enstrayedapi/tree/new-db">new-db</a> branch.</p>
-
 
     <div class="inlineheader">
         <h2>/api/nowplaying</h2>
@@ -140,6 +133,21 @@
     </div>
     <p><b>Internal Use Only. </b>This is the endpoint used by ECLS to finish the login flow. It will write the newly created token to the <code>APIToken</code> cookie as well as performing the action set by <code>state</code>, see <a href="#jumplink_authlogin">login endpoint</a>.</p>
 
+    <div class="inlineheader">
+        <h2>/api/helpdesk/forms/*</h2>
+        <a>helpdesk.js:15</a>
+        <div><span>GET</span></div>
+    </div>
+
+    <p><b>Internal Use Only. </b>Serves all files in the <code>website/helpdesk/forms</code> directory for use in the Helpdesk frontend.</p>
+
+    <!-- <div class="inlineheader">
+        <h2>/dynamic/icon/*</h2>
+        <a>dynamic.js:3</a>
+        <div><span>GET</span></div>
+    </div>
+
+    <p><b>Internal Use Only. </b>Returns the requested icon (stored in <code>website/dynamic/icons</code>) in any color (hex) specified in the URL. Example: <code>/dynamic/icon/github/00ff00</code> will return the GitHub logo in neon green.</p> -->
     
 </body>
 </html>

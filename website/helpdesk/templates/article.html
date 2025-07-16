@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enstrayed Helpdesk - <!--SSR_REPLACE_TITLE--></title>
+    <link rel="stylesheet" href="/static/helpdesk/helpdesk.css">
+    <script src="/static/helpdesk/login.js"></script>
+</head>
+<body>
+    
+    <div class="headerbar">
+        <h1>Enstrayed Helpdesk</h1>
+        <a href="/helpdesk/ticket/new">Open Ticket</a>
+        <a href="/helpdesk/articles">Knowledgebase</a>
+        
+        <div class="headerbarright">
+            <button id="loginButton" onclick="loginFunction()">Login</button>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="articlecontent">
+            <!--SSR_REPLACE_BODY-->
+        </div>
+    </div>
+    <dialog id="globalDialog">
+        <h2 id="globalDialogHeader">Warning</h2>
+        <p id="globalDialogText">This is a warning</p>
+        <button onclick="document.getElementById('globalDialog').close()">Dismiss</button>
+    </dialog>
+</body>
+</html>

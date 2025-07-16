@@ -6,12 +6,12 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
-if (!process.env.DATABASE_URI) {
+if (!process.env.DATABASE_URL) {
     console.log("FATAL: DATABASE_URI must be set")
     process.exit(1)
 }
 
-const db = postgres(process.env.DATABASE_URI)
+const db = postgres(process.env.DATABASE_URL)
 
 const globalConfig = await db`select content from config where id = ${process.env.CONFIG_OVERRIDE ?? 'production'}`.then(response => {return response[0]["content"]}).catch(error => {
     console.log(`FATAL: Error occured in downloading configuration: ${error}`)

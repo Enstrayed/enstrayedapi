@@ -1,14 +1,26 @@
+html {
+    background-color: #0f0f0f;
+    background-image: url('/static/bridge2.jpg');
+    /*! background-size: 100%; */
+    background-position-y: 50%;
+    background-position-x: center;
+    height: 100%;
+}
+
 body {
     margin: 0;
-    font-family: 'Segoe UI Variable', sans-serif;
+    font-family: 'Segoe UI Variable Text', sans-serif;
+    height: 100%;
 
-    background-color: #282828;
     
 
     display: grid;
     place-items: center;
 
-
+    backdrop-filter: blur(10px);
+    
+    color: #fff;
+    
 }
 
 .mainContent {
@@ -18,11 +30,16 @@ body {
     gap: 2.5em;
 
     padding: 2em;
-    background-color: #fdfdfd;
-    box-shadow: 0 0 1em 0 #202020;
+    background-color: #0f0f0f;
+    box-shadow: 0 0 1em 0 #0f0f0f;
+    
 
     position: relative;
     margin-top: 96px;
+}
+
+.mainContent > div > h1, h2 {
+    margin: 0 0 0.5em;
 }
 
 .linkColumn {
@@ -63,19 +80,27 @@ body {
 }
 
 .blogPostsList > ul {
-    list-style-image: url('/static/icons/post.svg');
+    list-style-image: url('/dynamic/icon/post/7CB342');
     list-style-position: inside;
     padding: 0;
     margin: 0;
-    gap: 0.5em;
+}
+
+.blogPostsList > ul > li {
+    margin: 0.5em 0 0;
+    font-family: Consolas, monospace;
+}
+
+.blogPostsList > ul > li > a {
+    font-family: 'Segoe UI Variable', sans-serif;
 }
 
 a, a:link {
-    color: #366FFF;
+    color: #7CB342;
 }
 
 a:hover {
-    color: #ff8266;
+    color: #9CCC65;
 }
 
 a > img {
