@@ -47,5 +47,9 @@ fs.readdir("./routes", (err, files) => {
     }
 })
 
+// app.use(function(req,res,next) {
+//     res.status(404).send("miau")
+// })
+
 process.stdout.write(`>>> EnstrayedAPI ${globalVersion} | Started ${startTime} on ${process.env.API_PORT ?? 8081}`)
 app.listen(process.env.API_PORT ?? 8081)

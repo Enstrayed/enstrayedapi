@@ -2,6 +2,9 @@
 
 This page covers the steps I went through to setup the UniFi Network controller on an Orange Pi Zero 3. For no reason obvious to me, this process was overcomplicated and very annoying. 
 
+# 2025-08 Update
+This article is somewhat out of date now as Ubiquiti has [introduced UniFi OS](https://blog.ui.com/article/introducing-unifi-os-server) which changes how the Network controller is deployed. I have personally switched over to it and recommend it over all of this mess.
+
 ## Background / The Problem
 I purchased the Orange Pi Zero 3 because it was cheap and I wanted to move my UniFi controller out of the Docker container on my main server. The idea was to create a DIY UniFi CloudKey, hence I called mine `shitty-cloudkey`. On the surface, this is rather trivial; Ubiquiti's apt repository includes `arm64` packages and the UniFi controller itself is a Java application, making it rather portable.
 

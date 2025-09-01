@@ -19,8 +19,14 @@ body {
     flex-direction: row;
     gap: 2em;
     align-items: center;
+    padding: 1em 2em;
 }
 
+.headerbarTitle {
+    font-size: xx-large;
+    color: black;
+    text-decoration: none;
+}
 
 .headerbarright {
     margin-left: auto;
@@ -100,3 +106,4 @@ dialog > button {
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
 }
+
