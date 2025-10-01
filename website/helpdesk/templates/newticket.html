@@ -9,11 +9,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('formSelection').value = 'none'
-            document.getElementById('formSelection').addEventListener('change', function() {
-                useGlobalDialog(`Info`, `You selected ${this.value}`)
-            })
+            
 
-            fetch(`/api/helpdesk/forms/manifest.json`).then(fetchRes => {
+            fetch(`/api/helpdesk/forms/manifest`).then(fetchRes => {
                 fetchRes.json().then(jsonRes => {
                     for (let x in jsonRes) {
                         let newElement = document.createElement('option')
@@ -23,6 +21,33 @@
                     }
                 })
             })
+
+            document.getElementById('formSelection').addEventListener('change', function() {
+                document.getElementById("formarea").innerHTML = ""
+                fetch(`/api/helpdesk/forms/${this.value}`).then(fetchRes => {
+                    fetchRes.json().then(jsonRes => {
+                        for (x in jsonRes.form) {
+                            let newElem
+                            switch (jsonRes.form[x].type) {
+                                case "text":
+                                    newElem = document.createElement('div')
+                                    newElem.innerHTML = `<label for="${"formarea_"+x}">${jsonRes.form[x].content}</label><br><input type="text" id="${"formarea_"+x}">`
+
+                                    document.getElementById("formarea").appendChild(newElem)
+                                    break;
+                                
+                                case "bigtext":
+                                    newElem = document.createElement('div')
+                                    newElem.innerHTML = `<label for="${"formarea_"+x}">${jsonRes.form[x].content}</label><br><textarea id="${"formarea_"+x}" ></textarea>`
+
+                                    document.getElementById("formarea").appendChild(newElem)
+                                    break;
+                                    
+                            }
+                        }
+                    })
+                })
+            })
         })
     </script>
 </head>
@@ -30,23 +55,31 @@
     
     <div class="headerbar">
         <a href="/helpdesk" class="headerbarTitle">Enstrayed Helpdesk</a>
-        <a>Open Ticket</a>
+        <a>New Request</a>
         <a href="/helpdesk/articles">Knowledgebase</a>
         
         <div class="headerbarright">
             <button id="loginButton" onclick="loginFunction()">Login</button>
         </div>
     </div>
+    
     <div class="maincontent">
         <div class="newticketmaincontent">
-            <h2>New Ticket</h2>
-            <label for="formSelection">Please select a form: </label>
-            <select name="Form Selection" id="formSelection">
-                <option value="none" disabled selected>-- Choose From List --</option>
-            </select>
+            <h2>New Request</h2>
+            <div>
+                <label for="formSelection">Please select a form: </label>
+                <select name="Form Selection" id="formSelection">
+                    <option value="none" disabled selected>-- Choose From List --</option>
+                </select>
+            </div>
             <hr>
+
+            <div id="formarea">
+
+            </div>
         </div>
     </div>
+
     <dialog id="globalDialog">
         <h2 id="globalDialogHeader">Warning</h2>
         <p id="globalDialogText">This is a warning</p>

@@ -57,23 +57,8 @@ body {
     margin: 0 0 0.5em 0;
 }
 
-.articlecontent {
-    background-color: #fff;
-    padding: 2em;
-    margin: 2em 0 2em;
-    max-width: 100ch;
-}
-
-.articlecontent > h1 {
-    margin: 0 0 0.5em;
-}
-
-.articlecontent > ol > li {
-    margin: 0 0 0.2em;
-}
-
-.articlecontent img {
-    max-width: 100%;
+.helpdeskScopeOnly {
+    display: none;
 }
 
 .linkColumn {
@@ -107,3 +92,30 @@ dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+#formarea > div > input {
+    width: 50%;
+}
+
+#formarea > div > textarea {
+    width: 100%;
+}
+
+/* Article Specific */
+.articlecontent {
+    background-color: #fff;
+    padding: 2em;
+    margin: 2em 0 2em;
+    max-width: 100ch;
+}
+
+.articlecontent > h1 {
+    margin: 0 0 0.5em;
+}
+
+.articlecontent > ol > li {
+    margin: 0 0 0.2em;
+}
+
+.articlecontent img {
+    max-width: 100%;
+}

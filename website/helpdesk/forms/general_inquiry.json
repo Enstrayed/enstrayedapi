@@ -4,10 +4,6 @@
             "type": "text",
             "content": "What is your name?"
         },
-        "email": {
-            "type": "text",
-            "content": "What is a good email address to reach you at?"
-        },
         "message": {
             "type": "bigtext",
             "content": "Please enter your message below."

@@ -9,3 +9,11 @@ app.get("/dynamic/icon/*", (rreq, rres) => {
         rres.sendStatus(404)
     }
 })
+
+app.get("/dynamic/background/*", (rreq,rres) => {
+    if (rreq.headers["accept"].includes("image/jxl")) {
+        rres.setHeader("Content-Type", "image/jxl").sendFile( `${process.cwd()}/website/dynamic/backgrounds/${rreq.path.split("/")[3]}.jxl`)
+    } else {
+        rres.setHeader("Content-Type", "image/jpeg").sendFile( `${process.cwd()}/website/dynamic/backgrounds/${rreq.path.split("/")[3]}.jpg`)
+    }
+})

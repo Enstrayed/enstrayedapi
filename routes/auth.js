@@ -6,8 +6,8 @@ import { randomStringBase62, getHumanReadableUserAgent } from "../liberals/misc.
 app.get("/api/auth/whoami", (rreq,rres) => {
     if (!rreq.cookies["APIToken"] && !rreq.get("Authorization")) {
         rres.send({ "loggedIn": false, "username": "", "scopes": "" })
-    } else {
-        db`select s.scopes, u.username from sessions s join users u on s.owner = u.id where s.token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
+    } else { // select 
+        db`select scopes,username from sessions where token = ${rreq.cookies["APIToken"] ?? rreq.get("Authorization")}`.then(dbRes => {
             if (dbRes.length > 0 && dbRes.length < 2) {
                 rres.send({ "loggedIn": true, "username": dbRes[0]?.username, "scopes": dbRes[0]?.scopes.split(",") })
             } else {
@@ -75,7 +75,7 @@ app.get("/api/auth/callback", (rreq,rres) => {
                             let newExpiration = Date.now() + 86400
                             let newComment = `Login token for ${getHumanReadableUserAgent(rreq.get("User-Agent"))} on ${rreq.get("cf-connecting-ip") ?? rreq.ip}`
 
-                            db`insert into sessions (token,owner,scopes,expires,comment) values (${newToken},(select id from users where oidc_username = ${fetchRes2.username}),${fetchRes2.enstrayedapi_scopes},${newExpiration},${newComment});`.then(dbRes1 => {
+                            db`insert into sessions (token,username,scopes,expires,comment) values (${newToken},${fetchRes2.username},${fetchRes2.enstrayedapi_scopes},${newExpiration},${newComment});`.then(dbRes1 => {
                                 if (rreq.query.state.split("_")[0] === "redirect") {
                                     let newDestination = atob(rreq.query.state.split("_")[1].replace("-","/"))
                                     rres.setHeader("Set-Cookie", `APIToken=${newToken}; Domain=${rreq.hostname}; Expires=${new Date(newExpiration).toUTCString()}; Path=/`).redirect(newDestination)

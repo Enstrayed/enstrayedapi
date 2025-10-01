@@ -1,9 +1,8 @@
 html {
     background-color: #0f0f0f;
-    background-image: url('/static/bridge2.jpg');
-    /*! background-size: 100%; */
+    background-image: url('/dynamic/background/main');
+    background-size: cover;
     background-position-y: 50%;
-    background-position-x: center;
     height: 100%;
 }
 
@@ -64,7 +63,6 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: 0.2em;
-    max-width: 14em;
 }
 
 #nowplaying .nowPlayingLine2 {

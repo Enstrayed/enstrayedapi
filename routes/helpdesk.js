@@ -26,7 +26,14 @@ app.get("/helpdesk/ticket/new", (rreq,rres) => {
 })
 
 app.get("/api/helpdesk/forms/*", (rreq, rres) => {
-    rres.sendFile(process.cwd()+"/website/helpdesk/forms/"+rreq.url.replace("/api/helpdesk/forms/",""))
+    fs.readFile(process.cwd()+"/website/helpdesk/forms/"+rreq.url.replace("/api/helpdesk/forms/","")+".json","utf-8", (error, data) => {
+        if (error) {
+            rres.status(400).send("Unable to retrieve requested form")
+        } else {
+            rres.type('json').send(data)
+        }
+    })
+
 })
 
 app.get("/helpdesk/static/*", (rreq,rres) => {
