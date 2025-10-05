@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Card</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            background-color: #111;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .theCardItself {
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            max-width: 34ch;
+            background-image: url("/static/pages/contactcard-assets/nordwood-themes-R53t-Tg6J4c-unsplash.jpg");
+            background-size: cover;
+            padding: 1em;
+            gap: 1em;
+
+        }
+
+        .linkButton {
+            display: flex;
+            gap: 0.5em;
+            align-content: center;
+            padding: 0.75em;
+            color: white;
+        }
+
+        .linkButtonText {
+            font-size: 1.75em;
+            font-family: 'Segoe UI', --apple-system, sans-serif;
+        }
+
+        .signalButton {
+            background-color: #3b45fd;
+
+        }
+
+        .twitterButton {
+            background-color: #00a2f5;
+        }
+
+        .immichButton {
+            background-color: #000;
+            color: #accbfa;
+        }
+
+        .linkButtonContainer {
+            width: 100%;
+            text-decoration: none;
+        }
+
+        .mainContainer {
+            display: flex;
+            flex-direction: column;
+            max-width: 60ch;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="theCardItself">
+        <img src="https://i.enstrayed.com/contactphoto.jpg" alt="Contact Photo"
+            style="border-radius: 100%; width: 10em;">
+
+        <span style="font-size: 3em;">@Enstrayed</span>
+        <span>It seems you scanned my badge! Here's where to find me elsewhere:</span>
+
+        <a href="https://twitter.com/enstrayed" class="linkButtonContainer">
+            <div class="linkButton twitterButton">
+                <img src="/dynamic/icon/twitter/ffffff" style="width: 1lh;">
+                <span class="linkButtonText">Twitter</span>
+            </div>
+        </a>
+
+        <a href="https://signal.me/#eu/rSUBnWj8pO74gg0tWsm05bYbuoOHPtlNbjL5h7BLng9ff9_K_jVMKoz5glHr3Oco"
+            class="linkButtonContainer">
+            <div class="linkButton signalButton">
+                <img src="/dynamic/icon/signal/ffffff" style="width: 1lh;">
+                <span class="linkButtonText">Signal</span>
+            </div>
+        </a>
+
+        <span>Here's the photos I took while in Reno:</span>
+
+        <a href="https://photos.enstrayed.com/share/MkDPxuQJJrbU_yISKey-BwVsdnnIkzEQEjMN2Gk1XfCnXtzp9ZtOGub4kN_VTJLzwnI"
+            class="linkButtonContainer">
+            <div class="linkButton immichButton">
+                <img src="/static/pages/contactcard-assets/immich.svg" style="width: 1lh;">
+                <span class="linkButtonText">BLFC Photo Album</span>
+            </div>
+        </a>
+    </div>
+</body>
+
+</html>
