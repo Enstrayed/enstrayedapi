@@ -32,7 +32,7 @@ async function queryLastfm() {
             }
         }
     }).catch(fetchError => {
-        console.log("libnowplaying.js: Fetch failed! "+fetchError)
+        console.log("libnowplaying.js: Fetch failed! " + fetchError)
         return {}
     })
 }
@@ -42,30 +42,34 @@ async function queryLastfm() {
  * @returns {object} Object containing response in JSON and HTML (as string)
  */
 async function queryJellyfin() {
-    return await fetch(`${globalConfig.nowplaying.jellyfin.host}/Sessions`, {
-        headers: {
-            "Authorization": `MediaBrowser Token=${globalConfig.nowplaying.jellyfin.apiKey}`
-        }
-    }).then(response => response.json()).then(response => {
-        for (let x in response) {
-            if (response[x].UserName !== globalConfig.nowplaying.jellyfin.target) { break } // If session does not belong to target specified in config, skip
-            if (response[x].NowPlayingItem == undefined) { break } // If the NowPlayingItem object is not present, skip (session is not playing anything)
-            if (response[x].NowPlayingItem.MediaType !== "Audio") { break } // If not playing 'audio', skip, this might change in the future
-
-            return {
-                "json": {
-                    "songName": response[x].NowPlayingItem.Name,
-                    "artistName": response[x].NowPlayingItem.Artists[0],
-                    "albumName": response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`,
-                    "artUrl": `${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary`,
-                    "link": `https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}`
-                },
-                "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art"> <div> <span class="nowPlayingLine1">I'm listening to</span> <span class="nowPlayingLine2">${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</span> <span class="nowPlayingLine3">from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</span> <a class="nowPlayingLine4" href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ","+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ","+")}">View on Last.fm</a></div>`
+    try {
+        return await fetch(`${globalConfig.nowplaying.jellyfin.host}/Sessions`, {
+            headers: {
+                "Authorization": `MediaBrowser Token=${globalConfig.nowplaying.jellyfin.apiKey}`
             }
-        }
+        }).then(response => response.json()).then(response => {
+            for (let x in response) {
+                if (response[x].UserName !== globalConfig.nowplaying.jellyfin.target) { break } // If session does not belong to target specified in config, skip
+                if (response[x].NowPlayingItem == undefined) { break } // If the NowPlayingItem object is not present, skip (session is not playing anything)
+                if (response[x].NowPlayingItem.MediaType !== "Audio") { break } // If not playing 'audio', skip, this might change in the future
 
+                return {
+                    "json": {
+                        "songName": response[x].NowPlayingItem.Name,
+                        "artistName": response[x].NowPlayingItem.Artists[0],
+                        "albumName": response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`,
+                        "artUrl": `${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary`,
+                        "link": `https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ", "+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ", "+")}`
+                    },
+                    "html": `<img src="${globalConfig.nowplaying.jellyfin.hostPublic}/Items/${response[x].NowPlayingItem.Id}/Images/Primary" alt="Album Art"> <div> <span class="nowPlayingLine1">I'm listening to</span> <span class="nowPlayingLine2">${response[x].NowPlayingItem.Name} by ${response[x].NowPlayingItem.Artists[0]}</span> <span class="nowPlayingLine3">from ${response[x].NowPlayingItem.Album ?? `${response[x].NowPlayingItem.Name} (Single)`}</span> <a class="nowPlayingLine4" href="https://www.last.fm/music/${response[x].NowPlayingItem.Artists[0].replaceAll(" ", "+")}/_/${response[x].NowPlayingItem.Name.replaceAll(" ", "+")}">View on Last.fm</a></div>`
+                }
+            }
+
+            return notPlayingAnythingPlaceholder
+        })
+    } catch {
         return notPlayingAnythingPlaceholder
-    })
+    }
 }
 
 export { queryLastfm, queryJellyfin }
