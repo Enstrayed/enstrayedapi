@@ -1,4 +1,5 @@
 import { app, fs } from "../index.js"
+import { parseKbas } from "../liberals/directoryparsing.js"
 import { marked } from "marked"
 
 app.get("/helpdesk", (rreq, rres) => {
@@ -6,7 +7,11 @@ app.get("/helpdesk", (rreq, rres) => {
 })
 
 app.get("/helpdesk/articles", (rreq, rres) => {
-    rres.send("miau")
+    let file = fs.readFileSync(process.cwd() + "/website/helpdesk/templates/article.html", "utf-8")
+    file = file.replace("<!--SSR_REPLACE_URL-->", `https://enstrayed.com${rreq.url}`)
+    file = file.replaceAll("<!--SSR_REPLACE_TITLE-->", "Knowledgebase")
+    file = file.replace("<!--SSR_REPLACE_BODY-->", parseKbas())
+    rres.send(file)
 })
 
 app.get("/helpdesk/articles/*", (rreq, rres) => {

@@ -1,7 +1,5 @@
 import { app, globalConfig, fs, globalVersion } from "../index.js" // Get globals from index
-import { execSync } from 'child_process'
-import { checkToken } from "../liberals/auth.js"
-import { logRequest } from "../liberals/logging.js"
+import { parsePosts } from "../liberals/directoryparsing.js"
 import { marked } from "marked"
 
 var timeSinceLastQuery = Date.now()-10000
@@ -12,7 +10,7 @@ app.get("/", (rreq, rres) => {
         rres.send(cachedResult)
     } else {
         let indexFile = fs.readFileSync(process.cwd()+"/website/templates/newindextemplate.html","utf-8")
-        cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parseFiles()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
+        cachedResult = indexFile.replace("<!--SSR_BLOGPOSTS-->",parsePosts()).replace("<!--SSR_APIVERSION-->",`<sup>API Version ${globalVersion}</sup>`)
         rres.send(cachedResult)
     }
 })
@@ -42,25 +40,5 @@ app.get("/posts/*", (rreq,rres) => {
     }
     
 })
-
-function parseFiles() {
-    let files = fs.readdirSync(process.cwd()+"/website/posts")
-    let result = ""
-
-    for (let x in files) {
-        if (files[x].endsWith(".html") === false && files[x].endsWith(".md") === false ) { break } // If file/dir is not .html or .md then ignore
-
-        let date = files[x].split("-")[0]
-        if (date < 10000000 || date > 99999999) { break } // If date does not fit ISO8601 format then ignore
-
-        date = date.replace(/.{2}/g,"$&-").replace("-","").slice(0,-1) // Insert a dash every 2 characters, remove the first dash, remove the last character
-
-        let name = files[x].slice(9).replace(/-/g," ").replace(".html","").replace(".md","") // Strip Date, replace seperator with space & remove file extension
-
-        result = `<li>${date} <a href="/posts/${files[x]}">${name}</a></li>`+result
-    }
-
-    return result
-}
 
 export {app} 
