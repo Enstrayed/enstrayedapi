@@ -33,7 +33,7 @@ async function checkTokenNew(request, scope) {
     if (!request.cookies["APIToken"] && !request.get("Authorization")) {
         return { result: false, owner: "", ownerId: "" }
     } else {
-        return await db`select s.*, u.username from sessions s join users u on s.owner = u.id where s.token = ${request.get("Authorization") ?? request.cookies["APIToken"]}`.then(response => {
+        return await db`select * from sessions where token = ${request.get("Authorization") ?? request.cookies["APIToken"]}`.then(response => {
             if (response.length === 0) {
                 return { result: false, owner: response[0]?.username, ownerId: response[0]?.owner }
             } else if (response[0]?.scopes.split(",").includes(scope)) {
